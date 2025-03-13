@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Cover Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <script src="https://polyfill.io/v3/polyfill.min.js"></script>
+    <style>
+        /* Existing styles remain unchanged */
+        :root {
+            --primary-color: #2196F3;
+            --secondary-color: #1976D2;
+            --accent-color: #FF9800;
+            --background-color: #f5f7fa;
+            --text-color: #2d3748;
+            --border-color: #e2e8f0;
+            --success-color: #4CAF50;
+            --error-color: #f44336;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: #fff;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .header h1 {
+            font-size: 2.25rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        @media (min-width: 1024px) {
+            .form-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .input-section {
+            background: #fff;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .preview-section {
+            background: #fff;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 1rem;
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: var(--radius-md);
+            background: #fff;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-buttons {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        }
+
+        .developer-footer {
+            margin-top: 3rem;
+            padding: 2rem;
+            text-align: center;
+            background: #fff;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .developer-details {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .developer-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .contact-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .contact-item a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .invalid {
+            border-color: var(--error-color) !important;
+            box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2) !important;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(33, 150, 243, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .dark-theme {
+            --background-color: #1a1a2e;
+            --text-color: #e6e6e6;
+            --border-color: #2a2a3d;
+        }
+
+        .dark-theme .header,
+        .dark-theme .input-section,
+        .dark-theme .preview-section,
+        .dark-theme .developer-footer {
+            background: #16213e;
+            color: #e6e6e6;
+        }
+
+        .dark-theme .form-control {
+            background: #0f3460;
+            color: #e6e6e6;
+            border-color: #2a2a3d;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            color: white;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .notification.success {
+            background-color: var(--success-color);
+        }
+
+        .notification.error {
+            background-color: var(--error-color);
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .header {
+                padding: 1.25rem;
+            }
+
+            .input-section, .preview-section {
+                padding: 1.25rem;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .form-control {
+                padding: 0.75rem;
+            }
+
+            .btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .preview-frame {
+                height: 350px;
+            }
+
+            .action-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .developer-footer {
+                padding: 1.5rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .form-container {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-section {
+                position: relative;
+                top: 0;
+                margin-top: 2rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+            .floating-tools {
+                bottom: env(safe-area-inset-bottom, 20px);
+                right: env(safe-area-inset-right, 20px);
+            }
+        }
+
+        @media print {
+            .header, .form-container, .developer-footer, .action-buttons {
+                display: none !important;
+            }
+
+            .preview-frame {
+                height: auto;
+                border: none;
+                box-shadow: none;
+            }
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        .template-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .template-option {
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .template-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .template-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(33, 150, 243, 0.1);
+        }
+
+        .template-option img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--radius-sm);
+        }
+
+        .floating-tools {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .tool-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .tool-button:hover {
+            transform: scale(1.1);
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        .form-control:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        .font-size-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        @supports (-webkit-appearance: none) or (-moz-appearance: none) {
+            .form-control {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+            }
+        }
+
+      
+        @supports (-webkit-touch-callout: none) {
+            .preview-frame {
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+
+       
+        @-moz-document url-prefix() {
+            .preview-section {
+                position: relative;
+            }
+        }
+
+        @supports (-ms-ime-align: auto) {
+            .form-container {
+                display: -ms-grid;
+                -ms-grid-columns: 1fr 1fr;
+            }
+        }
+
+        .help-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+            border: none;
+            font-size: 1.5rem;
+        }
+
+        .help-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+        }
+
+        .help-modal.active {
+            display: block;
+        }
+
+        .help-content {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close-modal {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 1.5rem;
+            z-index: 2001;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <button class="help-button" onclick="showHelp()" title="How to Use">
+        <i class="fas fa-question"></i>
+    </button>
+
+    <div class="help-modal" id="helpModal">
+        <button class="close-modal" onclick="hideHelp()">
+            <i class="fas fa-times"></i>
+        </button>
+        <iframe src="website.html" class="help-content"></iframe>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <h1>📄 Assignment Cover Generator</h1>
+            <p>Create professional academic covers in minutes</p>
+        </header>
+
+        <main id="main-content">
+            <div class="form-container">
+                <div class="loading-overlay">
+                    <div class="spinner"></div>
+                </div>
+
+                <section class="input-section">
+                    <form id="coverForm">
+                        <div class="form-group">
+                            <label for="studentName">👤 Student Name</label>
+                            <input type="text" id="studentName" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rollNumber">🎓 University Roll No.</label>
+                            <input type="text" id="rollNumber" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="classRoll">🏫 Class Roll No.</label>
+                            <input type="text" id="classRoll" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="semester">📚 Semester</label>
+                            <select id="semester" class="form-control" required>
+                                <option value="">Select Semester</option>
+                                <option value="1st">1st Semester</option>
+                                <option value="2nd">2nd Semester</option>
+                                <option value="3rd">3rd Semester</option>
+                                <option value="4th">4th Semester</option>
+                                <option value="5th">5th Semester</option>
+                                <option value="6th">6th Semester</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">📖 Subject</label>
+                            <input type="text" id="subject" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="courseCode">🔖 Course Code</label>
+                            <input type="text" id="courseCode" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="submissionDate">📅 Submission Date</label>
+                            <input type="date" id="submissionDate" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="assignmentType">📋 Assignment Type</label>
+                            <select id="assignmentType" class="form-control" required>
+                                <option value="Assignment">Assignment</option>
+                                <option value="Project">Project</option>
+                                <option value="Lab Report">Lab Report</option>
+                                <option value="Case Study">Case Study</option>
+                                <option value="Term Paper">Term Paper</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="themeColor">🎨 Theme Color</label>
+                            <select id="themeColor" class="form-control">
+                                <option value="#1a237e">Default Blue</option>
+                                <option value="#1b5e20">Forest Green</option>
+                                <option value="#b71c1c">Ruby Red</option>
+                                <option value="#4a148c">Royal Purple</option>
+                                <option value="#212121">Classic Black</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="template">🖼 Cover Template</label>
+                            <select id="template" class="form-control">
+                                <option value="classic">Classic</option>
+                                <option value="modern">Modern</option>
+                                <option value="minimal">Minimal</option>
+                                <option value="professional">Professional</option>
+                            </select>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-magic"></i> Generate
+                            </button>
+                            <button class="btn btn-primary" onclick="saveFormData()">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button class="btn btn-primary" onclick="loadFormData()">
+                                <i class="fas fa-folder-open"></i> Load
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <section class="preview-section">
+                    <h2>Preview 👀</h2>
+                    <iframe id="previewFrame" class="preview-frame"></iframe>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="printCover()">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                        <button class="btn btn-primary" onclick="downloadPDF()">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="btn btn-primary" onclick="downloadJPG()">
+                            <i class="fas fa-image"></i> JPG
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="developer-footer">
+            <div class="developer-details">
+                <h3>Developed with ❤ by</h3>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Ajnish Kumar</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-university"></i>
+                        <span>BCA 3rd Sem - VBU</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto: ajnishk261@gmail.com">ajnishk261@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+91 9608415521</span>
+                    </div>
+                </div>
+                <p class="copyright">
+                    © 2024 Assignment Cover Generator. All rights reserved.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <div class="floating-tools">
+        <div class="tool-button" onclick="toggleTheme()" title="Toggle Theme">
+            <i class="fas fa-moon"></i>
+        </div>
+        <div class="tool-button" onclick="resetForm()" title="Reset Form">
+            <i class="fas fa-undo"></i>
+        </div>
+        <div class="tool-button" onclick="shareForm()" title="Share">
+            <i class="fas fa-share-alt"></i>
+        </div>
+    </div>
+
+    <div class="font-size-controls">
+        <button class="tool-button" onclick="adjustFontSize('decrease')" title="Decrease Font Size">
+            <i class="fas fa-minus"></i>
+        </button>
+        <button class="tool-button" onclick="adjustFontSize('increase')" title="Increase Font Size">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        document.getElementById('coverForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (validateForm()) generateCoverPage();
+        });
+
+        document.querySelectorAll('#coverForm input, #coverForm select').forEach(element => {
+            element.addEventListener('input', generateCoverPage);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.body.classList.add('dark-theme');
+                    document.querySelector('.theme-toggle i').classList.replace('fa-moon', 'fa-sun');
+                }
+                loadFormData();
+            } catch (err) {
+                console.error('Initialization error:', err);
+            }
+        });
+
+        function generateCoverPage() {
+            const data = {
+                studentName: document.getElementById('studentName').value,
+                rollNumber: document.getElementById('rollNumber').value,
+                classRoll: document.getElementById('classRoll').value,
+                semester: document.getElementById('semester').value,
+                subject: document.getElementById('subject').value,
+                courseCode: document.getElementById('courseCode').value,
+                submissionDate: document.getElementById('submissionDate').value,
+                assignmentType: document.getElementById('assignmentType').value,
+                themeColor: document.getElementById('themeColor').value,
+                template: document.getElementById('template').value
+            };
+
+            let coverHTML;
+            switch(data.template) {
+                case "modern":
+                    coverHTML = generateModernTemplate(data);
+                    break;
+                case "minimal":
+                    coverHTML = generateMinimalTemplate(data);
+                    break;
+                case "professional":
+                    coverHTML = generateProfessionalTemplate(data);
+                    break;
+                default:
+                    coverHTML = generateClassicTemplate(data);
+            }
+
+            const previewFrame = document.getElementById('previewFrame');
+            previewFrame.contentDocument.open();
+            previewFrame.contentDocument.write(coverHTML);
+            previewFrame.contentDocument.close();
+        }
+
+        function generateClassicTemplate(data) {
+            return `<!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    @page { size: A4; margin: 0; }
+                    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap');
+                    
+                    body {
+                        font-family: 'Cormorant Garamond', serif;
+                        width: 210mm;
+                        min-height: 297mm;
+                        margin: 0 auto;
+                        padding: 20mm;
+                        box-sizing: border-box;
+                        background: linear-gradient(to bottom right, #fff 97%, ${data.themeColor}50 100%);
+                        border: 12px double ${data.themeColor}40;
+                        position: relative;
+                    }
+
+                    .watermark {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%) rotate(-45deg);
+                        font-size: 6em;
+                        opacity: 0.03;
+                        color: ${data.themeColor};
+                        white-space: nowrap;
+                        pointer-events: none;
+                    }
+
+                    .cover-header {
+                        text-align: center;
+                        margin-bottom: 20mm;
+                        padding-bottom: 5mm;
+                        border-bottom: 2px solid ${data.themeColor}30;
+                    }
+
+                    .university-title {
+                        font-size: 28px;
+                        color: ${data.themeColor};
+                        margin: 10px 0;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+                    }
+
+                    .cover-logo {
+                        width: 120px;
+                        margin: 15px auto;
+                        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+                    }
+
+                    .assignment-title {
+                        text-align: center;
+                        margin: 25mm 0;
+                        padding: 5mm;
+                        border-top: 2px solid ${data.themeColor}30;
+                        border-bottom: 2px solid ${data.themeColor}30;
+                    }
+
+                    .assignment-type {
+                        font-size: 32px;
+                        margin-bottom: 15px;
+                        color: ${data.themeColor};
+                        font-weight: 700;
+                        letter-spacing: 1.5px;
+                    }
+
+                    .subject-title {
+                        font-size: 26px;
+                        margin: 10px 0;
+                        font-weight: 600;
+                    }
+
+                    .course-code {
+                        font-size: 20px;
+                        color: ${data.themeColor};
+                        font-style: italic;
+                    }
+
+                    .details-section {
+                        width: 85%;
+                        margin: 0 auto;
+                        background: ${data.themeColor}05;
+                        padding: 5mm;
+                        border-radius: 5mm;
+                    }
+
+                    .details-row {
+                        display: flex;
+                        margin: 12px 0;
+                        font-size: 18px;
+                        line-height: 1.6;
+                    }
+
+                    .details-label {
+                        width: 45%;
+                        font-weight: 600;
+                        color: ${data.themeColor};
+                        padding-right: 15px;
+                    }
+
+                    .details-value {
+                        width: 55%;
+                        position: relative;
+                        padding-left: 15px;
+                    }
+
+                    .details-value::before {
+                        content: ":";
+                        position: absolute;
+                        left: 0;
+                        color: ${data.themeColor};
+                    }
+
+                    .signature-section {
+                        margin-top: 30mm;
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 0 10mm;
+                    }
+
+                    .sign-box {
+                        text-align: center;
+                        width: 180px;
+                    }
+
+                    .sign-line {
+                        width: 100%;
+                        border-bottom: 1px solid #000;
+                        margin-bottom: 5px;
+                    }
+
+                    .sign-label {
+                        font-size: 16px;
+                        color: ${data.themeColor};
+                        font-weight: 600;
+                    }
+
+                    .corner-decoration {
+                        position: absolute;
+                        width: 40mm;
+                        height: 40mm;
+                        opacity: 0.1;
+                    }
+
+                    .top-left { top: 10mm; left: 10mm; transform: rotate(0deg); }
+                    .top-right { top: 10mm; right: 10mm; transform: rotate(90deg); }
+                    .bottom-left { bottom: 10mm; left: 10mm; transform: rotate(270deg); }
+                    .bottom-right { bottom: 10mm; right: 10mm; transform: rotate(180deg); }
+                </style>
+            </head>
+            <body>
+                <div class="watermark">VBU</div>
+                <svg class="corner-decoration top-left" viewBox="0 0 100 100">
+                    <path d="M0,0 L100,0 L100,10 C50,10 10,50 10,100 L0,100 Z" fill="${data.themeColor}"/>
+                </svg>
+                <svg class="corner-decoration top-right" viewBox="0 0 100 100">
+                    <path d="M0,0 L100,0 L100,10 C50,10 10,50 10,100 L0,100 Z" fill="${data.themeColor}"/>
+                </svg>
+                <svg class="corner-decoration bottom-left" viewBox="0 0 100 100">
+                    <path d="M0,0 L100,0 L100,10 C50,10 10,50 10,100 L0,100 Z" fill="${data.themeColor}"/>
+                </svg>
+                <svg class="corner-decoration bottom-right" viewBox="0 0 100 100">
+                    <path d="M0,0 L100,0 L100,10 C50,10 10,50 10,100 L0,100 Z" fill="${data.themeColor}"/>
+                </svg>
+
+                <div class="cover-header">
+                    <div class="university-title">Department of Computer Application</div>
+                    <div class="university-title">Vinoba Bhave University</div>
+                    <img src="https://i1.wp.com/www.winmeen.com/wp-content/uploads/2017/04/VBU-New-Logo.png?ssl=1" class="cover-logo" alt="University Logo">
+                </div>
+
+                <div class="assignment-title">
+                    <div class="assignment-type">${data.assignmentType}</div>
+                    <div class="subject-title">${data.subject}</div>
+                    <div class="course-code">Course Code: ${data.courseCode}</div>
+                </div>
+
+                <div class="details-section">
+                    <div class="details-row">
+                        <div class="details-label">Student Name</div>
+                        <div class="details-value">${data.studentName}</div>
+                    </div>
+                    <div class="details-row">
+                        <div class="details-label">University Roll Number</div>
+                        <div class="details-value">${data.rollNumber}</div>
+                    </div>
+                    <div class="details-row">
+                        <div class="details-label">Class Roll Number</div>
+                        <div class="details-value">${data.classRoll}</div>
+                    </div>
+                    <div class="details-row">
+                        <div class="details-label">Semester</div>
+                        <div class="details-value">${data.semester}</div>
+                    </div>
+                    <div class="details-row">
+                        <div class="details-label">Submission Date</div>
+                        <div class="details-value">${formatDate(data.submissionDate)}</div>
+                    </div>
+                </div>
+
+                <div class="signature-section">
+                    <div class="sign-box">
+                        <div class="sign-line"></div>
+                        <div class="sign-label">Date</div>
+                    </div>
+                    <div class="sign-box">
+                        <div class="sign-line"></div>
+                        <div class="sign-label">Student's Signature</div>
+                    </div>
+                </div>
+            </body>
+            </html>`;
+        }
+
+        function generateModernTemplate(data) {
+            return `<!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    @page { size: A4; margin: 0; }
+                    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap');
+                    body {
+                        font-family: 'Montserrat', sans-serif;
+                        width: 210mm;
+                        min-height: 297mm;
+                        margin: 0 auto;
+                        padding: 0;
+                        box-sizing: border-box;
+                        color: #333;
+                    }
+                    .header-band {
+                        background-color: ${data.themeColor};
+                        color: white;
+                        padding: 20mm 25mm;
+                        text-align: center;
+                    }
+                    .university-title { font-size: 24px; font-weight: 300; text-transform: uppercase; }
+                    .dept-title { font-size: 18px; font-weight: 300; margin-bottom: 10mm; }
+                    .assignment-type { font-size: 32px; font-weight: 700; margin: 5mm 0; }
+                    .content { padding: 25mm; }
+                    .subject { font-size: 28px; text-align: center; margin-bottom: 15mm; }
+                    .course-code { font-size: 18px; text-align: center; margin-bottom: 20mm; color: ${data.themeColor}; }
+                    .student-info { margin: 0 auto; max-width: 80%; }
+                    .info-row { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; }
+                    .info-label { width: 40%; font-weight: 500; }
+                    .info-value { width: 60%; }
+                    .signature { margin-top: 20mm; display: flex; justify-content: flex-end; }
+                    .sign-box { width: 150px; text-align: center; }
+                    .sign-line { width: 100%; border-bottom: 1px solid #333; margin-bottom: 5px; }
+                </style>
+            </head>
+            <body>
+                <div class="header-band">
+                    <div class="university-title">Vinoba Bhave University</div>
+                    <div class="dept-title">Department of Computer Application</div>
+                    <div class="assignment-type">${data.assignmentType}</div>
+                </div>
+
+                <div class="content">
+                    <div class="subject">${data.subject}</div>
+                    <div class="course-code">Course Code: ${data.courseCode}</div>
+
+                    <div class="student-info">
+                        ${generateModernDetails(data)}
+                    </div>
+
+                    <div class="signature">
+                        <div class="sign-box">
+                            <div class="sign-line"></div>
+                            <div>Student's Signature</div>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            </html>`;
+        }
+
+        function generateMinimalTemplate(data) {
+            return `<!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    @page { size: A4; margin: 0; }
+                    body {
+                        font-family: 'Helvetica Neue', sans-serif;
+                        width: 210mm;
+                        min-height: 297mm;
+                        margin: 0 auto;
+                        padding: 30mm;
+                        background: #f8f9fa;
+                    }
+                    .header {
+                        border-bottom: 3px solid ${data.themeColor};
+                        padding-bottom: 15px;
+                        margin-bottom: 30px;
+                    }
+                    .university {
+                        font-size: 24px;
+                        color: ${data.themeColor};
+                        letter-spacing: 1.5px;
+                    }
+                    .department {
+                        font-size: 18px;
+                        color: #666;
+                        margin-top: 5px;
+                    }
+                    .assignment-type {
+                        font-size: 32px;
+                        text-transform: uppercase;
+                        letter-spacing: 2px;
+                        margin: 40px 0;
+                        color: #2d3748;
+                    }
+                    .details-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin: 25px 0;
+                    }
+                    .details-table td {
+                        padding: 12px 0;
+                        border-bottom: 1px solid #e2e8f0;
+                    }
+                    .label {
+                        width: 40%;
+                        font-weight: 600;
+                        color: #4a5568;
+                    }
+                    .signature-section {
+                        margin-top: 60px;
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .date-box {
+                        text-align: right;
+                        margin-top: 40px;
+                        color: #4a5568;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <div class="university">Vinoba Bhave University</div>
+                    <div class="department">Department of Computer Application</div>
+                </div>
+
+                <div class="assignment-type">${data.assignmentType}</div>
+
+                <table class="details-table">
+                    <tr>
+                        <td class="label">Student Name</td>
+                        <td>${data.studentName}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">University Roll No</td>
+                        <td>${data.rollNumber}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Class Roll No</td>
+                        <td>${data.classRoll}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Subject</td>
+                        <td>${data.subject}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Course Code</td>
+                        <td>${data.courseCode}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Semester</td>
+                        <td>${data.semester}</td>
+                    </tr>
+                </table>
+
+                <div class="signature-section">
+                    <div>
+                        <div style="border-bottom: 1px solid #2d3748; width: 200px; margin-bottom: 5px;"></div>
+                        <div>Student Signature</div>
+                    </div>
+                    <div class="date-box">
+                        Submission Date: ${formatDate(data.submissionDate)}
+                    </div>
+                </div>
+            </body>
+            </html>`;
+        }
+
+        function generateProfessionalTemplate(data) {
+            return `<!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    @page { size: A4; margin: 0; }
+                    body {
+                        font-family: 'Playfair Display', serif;
+                        width: 210mm;
+                        min-height: 297mm;
+                        margin: 0 auto;
+                        padding: 25mm;
+                        box-sizing: border-box;
+                        background: #ffffff;
+                        border: 3px solid #1a237e;
+                        position: relative;
+                        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+                    }
+                    .header {
+                        text-align: center;
+                        margin-bottom: 15mm;
+                        position: relative;
+                    }
+                    .university-title {
+                        font-size: 26px;
+                        margin-bottom: 8px;
+                        color: #1a237e;
+                        font-weight: 700;
+                        letter-spacing: 0.5px;
+                    }
+                    .logo {
+                        display: block;
+                        margin: 0 auto 8mm auto;
+                        width: 200px;
+                        filter: grayscale(30%);
+                    }
+                    .assignment {
+                        text-align: center;
+                        font-size: 24px;
+                        margin-bottom: 5mm;
+                        padding: 5px 0;
+                        color: #1a237e;
+                        font-weight: 700;
+                        letter-spacing: 0.3px;
+                    }
+                    .assignment span {
+                        font-size: 18px;
+                        color: #0026ff;
+                        letter-spacing: 0.2px;
+                    }
+                    .details {
+                        margin: 0 auto;
+                        width: 85%;
+                        text-align: left;
+                    }
+                    .details-row {
+                        font-size: 15px;
+                        margin: 8mm 0;
+                        padding: 8px 0;
+                        border-bottom: 1px solid #eee;
+                        display: flex;
+                        align-items: baseline;
+                        font-weight: 700;
+                    }
+                    .details-label {
+                        width: 35%;
+                        color: #1a237e;
+                        margin-right: 15px;
+                    }
+                    .signature-section {
+                        margin-top: 20mm;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 0 20px;
+                    }
+                    .signature-box, .date-box {
+                        width: 200px;
+                        text-align: center;
+                        padding-top: 5px;
+                        font-weight: 700;
+                    }
+                    .date-box {
+                        font-style: italic;
+                        color: #000;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <div class="university-title">Department of Computer Application</div>
+                    <div class="university-title">Vinoba Bhave University</div>
+                    <img src="https://i1.wp.com/www.winmeen.com/wp-content/uploads/2017/04/VBU-New-Logo.png?ssl=1" alt="University Logo" class="logo">
+                </div>
+
+                <div class="assignment">
+                    ${data.subject}<br>
+                    <span>Subject Code :-${data.courseCode}</span>
+                </div>
+
+                <div class="details">
+                    <div class="details-row">
+                        <span class="details-label">Student Name</span> 
+                        <span>:-${data.studentName}</span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-label">University Roll Number</span> 
+                        <span>:-${data.rollNumber}</span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-label">Class Roll Number</span> 
+                        <span>:-${data.classRoll}</span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-label">Semester</span> 
+                        <span>:-${data.semester}</span>
+                    </div>
+                </div>
+
+                <div class="signature-section">
+                    <div class="date-box">
+                        Date:-_ _ _ _ _ _ _ _ _
+                    </div>
+                    <div class="signature-box">
+                        Signature
+                    </div>
+                </div>
+            </body>
+            </html>`;
+        }
+
+        function generateDetailsRows(data) {
+            return `
+                <div class="details-row">
+                    <span class="details-label">Student Name:</span>
+                    <span>${data.studentName}</span>
+                </div>
+                <div class="details-row">
+                    <span class="details-label">University Roll No:</span>
+                    <span>${data.rollNumber}</span>
+                </div>
+                <div class="details-row">
+                    <span class="details-label">Class Roll No:</span>
+                    <span>${data.classRoll}</span>
+                </div>
+                <div class="details-row">
+                    <span class="details-label">Semester:</span>
+                    <span>${data.semester} Semester</span>
+                </div>
+                <div class="details-row">
+                    <span class="details-label">Submission Date:</span>
+                    <span>${formatDate(data.submissionDate)}</span>
+                </div>
+            `;
+        }
+
+        function generateModernDetails(data) {
+            return `
+                <div class="info-row">
+                    <div class="info-label">Student Name</div>
+                    <div class="info-value">${data.studentName}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">University Roll No</div>
+                    <div class="info-value">${data.rollNumber}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Class Roll No</div>
+                    <div class="info-value">${data.classRoll}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Semester</div>
+                    <div class="info-value">${data.semester} Semester</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Submission Date</div>
+                    <div class="info-value">${formatDate(data.submissionDate)}</div>
+                </div>
+            `;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function validateForm() {
+            const form = document.getElementById('coverForm');
+            const inputs = form.querySelectorAll('input, select');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                // Remove any existing error messages
+                const existingError = input.parentNode.querySelector('.error-message');
+                if (existingError) {
+                    existingError.remove();
+                }
+
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('invalid');
+                    
+                    // Create error message with better browser support
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'error-message';
+                    errorMsg.textContent = `Please enter ${input.previousElementSibling.textContent.trim()}`;
+                    input.insertAdjacentElement('afterend', errorMsg);
+                } else {
+                    input.classList.remove('invalid');
+                }
+            });
+
+            return isValid;
+        }
+
+        async function downloadPDF() {
+            showLoading();
+            try {
+                const previewFrame = document.getElementById('previewFrame');
+                const scale = 2; // Higher resolution for better quality
+                const canvas = await html2canvas(previewFrame.contentDocument.body, {
+                    scale: scale,
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false,
+                    scrollY: -window.scrollY
+                });
+
+                // Use blob for better memory management
+                canvas.toBlob(async (blob) => {
+                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                        // For IE/Edge
+                        window.navigator.msSaveOrOpenBlob(blob, 'assignment-cover.pdf');
+                    } else {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'assignment-cover.pdf';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }
+                }, 'image/jpeg', 1.0);
+                
+                showNotification('PDF downloaded successfully!');
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                showNotification('Error generating PDF. Please try again.', 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function downloadJPG() {
+            showLoading();
+            try {
+                const previewFrame = document.getElementById('previewFrame');
+                const canvas = await html2canvas(previewFrame.contentDocument.body);
+                const link = document.createElement('a');
+                link.download = 'assignment-cover.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 1.0);
+                link.click();
+                showNotification('JPG downloaded successfully!');
+            } catch (error) {
+                showNotification('Error generating JPG: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function printCover() {
+            const previewFrame = document.getElementById('previewFrame');
+            try {
+                if (isFirefox) {
+                    // Firefox needs a slight delay
+                    setTimeout(() => {
+                        previewFrame.contentWindow.print();
+                    }, 100);
+                } else {
+                    previewFrame.contentWindow.print();
+                }
+            } catch (err) {
+                console.error('Print failed:', err);
+                showNotification('Unable to print. Please try again.', 'error');
+            }
+        }
+
+        function saveFormData() {
+            try {
+                const formData = {
+                    studentName: document.getElementById('studentName').value,
+                    rollNumber: document.getElementById('rollNumber').value,
+                    classRoll: document.getElementById('classRoll').value,
+                    semester: document.getElementById('semester').value,
+                    subject: document.getElementById('subject').value,
+                    courseCode: document.getElementById('courseCode').value,
+                    submissionDate: document.getElementById('submissionDate').value,
+                    assignmentType: document.getElementById('assignmentType').value,
+                    themeColor: document.getElementById('themeColor').value,
+                    template: document.getElementById('template').value
+                };
+                localStorage.setItem('coverGeneratorData', JSON.stringify(formData));
+                showNotification('Data saved successfully!');
+            } catch (err) {
+                console.error('Save failed:', err);
+                showNotification('Unable to save data', 'error');
+            }
+        }
+
+        function loadFormData() {
+            const savedData = localStorage.getItem('coverGeneratorData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                Object.keys(formData).forEach(key => {
+                    if (document.getElementById(key)) {
+                        document.getElementById(key).value = formData[key];
+                    }
+                });
+                generateCoverPage();
+                showNotification('Data loaded successfully!');
+            } else {
+                showNotification('No saved data found', 'error');
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }, 10);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const themeIcon = document.querySelector('.theme-toggle i');
+            if (document.body.classList.contains('dark-theme')) {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function showLoading() {
+            document.querySelector('.loading-overlay').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.querySelector('.loading-overlay').classList.remove('active');
+        }
+
+        function adjustFontSize(action) {
+            const preview = document.getElementById('previewFrame').contentDocument.body;
+            const currentSize = parseFloat(getComputedStyle(preview).fontSize);
+            const newSize = action === 'increase' ? currentSize * 1.1 : currentSize * 0.9;
+            preview.style.fontSize = `${newSize}px`;
+        }
+
+        function shareForm() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Assignment Cover Generator',
+                    text: 'Generate professional assignment covers easily!',
+                    url: window.location.href
+                }).catch(err => {
+                    console.error('Share failed:', err);
+                    fallbackShare();
+                });
+            } else {
+                fallbackShare();
+            }
+        }
+
+        function fallbackShare() {
+            const url = window.location.href;
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showNotification('Link copied to clipboard!');
+            } catch (err) {
+                console.error('Copy failed:', err);
+                showNotification('Unable to copy link', 'error');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        document.querySelectorAll('.template-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.template-option').forEach(opt => 
+                    opt.classList.remove('selected'));
+                option.classList.add('selected');
+                document.getElementById('template').value = option.dataset.template;
+                generateCoverPage();
+            });
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchEndX - touchStartX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    switchTemplate('prev');
+                } else {
+                    switchTemplate('next');
+                }
+            }
+        }
+
+        function switchTemplate(direction) {
+            const templates = ['classic', 'modern', 'minimal', 'professional'];
+            const current = document.getElementById('template').value;
+            const currentIndex = templates.indexOf(current);
+            let newIndex;
+
+            if (direction === 'next') {
+                newIndex = (currentIndex + 1) % templates.length;
+            } else {
+                newIndex = (currentIndex - 1 + templates.length) % templates.length;
+            }
+
+            document.getElementById('template').value = templates[newIndex];
+            generateCoverPage();
+        }
+
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+        const isEdge = /Edge/.test(navigator.userAgent);
+
+    
+        if (isSafari) {
+            document.querySelectorAll('img').forEach(img => {
+                img.setAttribute('loading', 'eager');
+            });
+        }
+
+        function resetForm() {
+            // Get the form element
+            const form = document.getElementById('coverForm');
+            
+            // Reset all form fields
+            form.reset();
+            
+            // Clear any error messages and invalid states
+            document.querySelectorAll('.error-message').forEach(msg => msg.remove());
+            document.querySelectorAll('.invalid').forEach(field => field.classList.remove('invalid'));
+            
+            // Reset theme color and template to defaults
+            document.getElementById('themeColor').value = '#1a237e';
+            document.getElementById('template').value = 'classic';
+            
+            // Regenerate the cover page with empty values
+            generateCoverPage();
+            
+            // Show notification
+            showNotification('Form has been reset');
+            
+            // Reset any saved form data in localStorage
+            try {
+                localStorage.removeItem('coverGeneratorData');
+            } catch (err) {
+                console.error('Error clearing saved data:', err);
+            }
+        }
+
+        function showHelp() {
+            document.getElementById('helpModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideHelp() {
+            document.getElementById('helpModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('helpModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideHelp();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideHelp();
+            }
+        });
+    </script>
+</body>
+</html>
