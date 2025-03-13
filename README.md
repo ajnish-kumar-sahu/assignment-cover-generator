@@ -57,7 +57,7 @@ A modern, responsive web application for generating professional academic assign
 
 **Ajnish Kumar**  
 BCA 3rd Semester  
-Vinoba Bhave University
+Vinoba Bhave University hazaribag,jharkhand
 
 ## 📝 License
 
@@ -69,7 +69,7 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 ## 🌐 Live Demo
 
-[View Live Demo](https://your-demo-link-here.com)
+[View Live Demo](https://ajnish-kumar-sahu.github.io/assignment-cover-generator/)
 
----
+--------------------------------------------------------------------------------------------
 Made with ❤️ by Ajnish Kumar
