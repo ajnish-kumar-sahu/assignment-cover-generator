@@ -29,13 +29,7 @@ The Assignment Cover Generator is a powerful tool designed to streamline the pro
 
 ### 2. Modern Template
 
-<<<<<<< HEAD
 ![Modern Template](./thumbs/modern.svg)
-=======
-**Ajnish Kumar**  
-BCA 3rd Semester  
-Vinoba Bhave University hazaribag,jharkhand
->>>>>>> 82203b2f680544de728d9ddca1de1654a2d712b5
 
 - Contemporary design elements
 - Clean and minimalist approach
@@ -236,7 +230,6 @@ npm run coverage
 
 ## 👨‍💻 Developer Profile
 
-<<<<<<< HEAD
 <div align="center">
   <img src="https://github.com/ajnish-kumar-sahu.png" alt="Ajnish Kumar" width="200" style="border-radius: 50%; margin-bottom: 20px;"/>
   
@@ -252,8 +245,8 @@ npm run coverage
       <td>BCA 3rd Semester</td>
     </tr>
     <tr>
-      <td><b>🏛️ University</b></td>
-      <td>Vinoba Bhave University</td>
+      <td><b>🏛 University</b></td>
+      <td>Vinoba Bhave University, Hazaribag, Jharkhand</td>
     </tr>
     <tr>
       <td><b>💻 Expertise</b></td>
@@ -282,20 +275,17 @@ npm run coverage
 
 ## 📊 Stats
 
-![GitHub stars](https://img.shields.io/github/stars/yourusername/assignment-cover-generator?style=social)
-![GitHub forks](https://img.shields.io/github/forks/yourusername/assignment-cover-generator?style=social)
-![GitHub issues](https://img.shields.io/github/issues/yourusername/assignment-cover-generator)
-![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/assignment-cover-generator)
+![GitHub stars](https://img.shields.io/github/stars/ajnish-kumar-sahu/assignment-cover-generator?style=social)
+![GitHub forks](https://img.shields.io/github/forks/ajnish-kumar-sahu/assignment-cover-generator?style=social)
+![GitHub issues](https://img.shields.io/github/issues/ajnish-kumar-sahu/assignment-cover-generator)
+![GitHub last commit](https://img.shields.io/github/last-commit/ajnish-kumar-sahu/assignment-cover-generator)
 
 ## 📅 Last Updated
 
 April 14, 2025
 
 ---
-<div style="text-align: center">Made with ❤️ by Ajnish Kumar</div>
-=======
-[View Live Demo](https://ajnish-kumar-sahu.github.io/assignment-cover-generator/)
-
---------------------------------------------------------------------------------------------
-Made with ❤️ by Ajnish Kumar
->>>>>>> 82203b2f680544de728d9ddca1de1654a2d712b5
+<div align="center">
+  <p>Made with ❤ by Ajnish Kumar</p>
+  <p><a href="https://ajnish-kumar-sahu.github.io/assignment-cover-generator/">View Live Demo</a></p>
+</div>
