@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="210mm" height="297mm" viewBox="0 0 210 297" xmlns="http://www.w3.org/2000/svg">
+  <rect width="210" height="297" fill="#fff"/>
+  <rect x="0" y="0" width="210" height="80" fill="#1a237e"/>
+  <rect x="20" y="100" width="170" height="160" fill="#f8f9fa"/>
+  <text x="105" y="45" font-family="Arial" font-size="14" fill="#fff" text-anchor="middle">Modern Template</text>
+</svg>

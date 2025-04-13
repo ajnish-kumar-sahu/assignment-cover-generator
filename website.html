@@ -7,197 +7,535 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2196F3;
-            --secondary: #1976D2;
-            --text: #333;
-            --bg: #f5f7fa;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --primary-color: #2196F3;
+            --secondary-color: #1976D2;
+            --background-color: #f5f7fa;
+            --text-color: #2d3748;
+            --border-color: #e2e8f0;
+            --radius-md: 8px;
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
-            color: var(--text);
-            background: var(--bg);
+            color: var(--text-color);
+            background: var(--background-color);
+            margin: 0;
+            padding: 2rem;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
+            background: white;
             padding: 2rem;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
         }
 
         h1 {
-            color: var(--primary);
-            margin-bottom: 1rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
         }
 
         .section {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
             margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            background: var(--background-color);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         h2 {
-            color: var(--secondary);
+            color: var(--secondary-color);
             margin-bottom: 1rem;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .feature-list {
-            list-style: none;
-        }
-
-        .feature-list li {
-            margin-bottom: 1rem;
+        ul {
             padding-left: 1.5rem;
-            position: relative;
+            list-style-type: none;
         }
 
-        .feature-list li::before {
-            content: "→";
+        ul ul {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-left: 2px solid var(--border-color);
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        li::before {
+            content: "•";
+            color: var(--primary-color);
             position: absolute;
             left: 0;
-            color: var(--primary);
+            font-weight: bold;
         }
 
-        .screenshot {
-            max-width: 100%;
-            border-radius: 5px;
-            margin: 1rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        ul ul li::before {
+            content: "○";
         }
 
         .tip {
             background: #e3f2fd;
-            padding: 1rem;
-            border-left: 4px solid var(--primary);
-            margin: 1rem 0;
+            padding: 1.25rem;
+            border-left: 4px solid var(--primary-color);
+            margin: 1.25rem 0;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            transition: var(--transition);
+        }
+
+        .tip:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .keyboard-shortcuts {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.75rem 1.5rem;
+            margin: 1.25rem 0;
+            background: white;
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        .shortcut-key {
+            background: #f8f9fa;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+            color: var(--primary-color);
+            display: inline-block;
+            min-width: 100px;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 0.75rem;
+            }
+            
             .container {
                 padding: 1rem;
             }
-            
+
             .section {
-                padding: 1.5rem;
+                padding: 1rem;
             }
+
+            .keyboard-shortcuts {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .shortcut-key {
+                min-width: auto;
+            }
+
+            ul {
+                padding-left: 0.5rem;
+            }
+
+            li {
+                padding-left: 1.25rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .section:hover,
+            .tip:hover {
+                transform: none;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #1a1c1e;
+                --text-color: #e2e8f0;
+                --border-color: #2d3748;
+            }
+
+            body {
+                background: #121416;
+            }
+
+            .container {
+                background: #1a1c1e;
+            }
+
+            .section {
+                background: #232527;
+            }
+
+            .tip {
+                background: #1a237e20;
+            }
+
+            .keyboard-shortcuts {
+                background: #232527;
+            }
+
+            .shortcut-key {
+                background: #1a1c1e;
+                color: var(--primary-color);
+            }
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            border: none;
+            font-size: 1.5rem;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>How to Use Assignment Cover Generator</h1>
-            <p>A comprehensive guide to creating professional assignment covers</p>
-        </header>
+        <h1>📝 How to Use Assignment Cover Generator</h1>
+
+        <div class="section">
+            <h2>👋 Welcome Guide</h2>
+            <ul>
+                <li>When you first visit, you'll see a welcome modal with quick tips</li>
+                <li>Choose "How to Use" to view this detailed guide</li>
+                <li>Check "Don't show again" if you want to skip the welcome screen on future visits</li>
+                <li>You can always access this guide by clicking the help button (?) in the top-left corner</li>
+            </ul>
+        </div>
 
         <div class="section">
             <h2>🚀 Getting Started</h2>
-            <ol class="feature-list">
-                <li>Open the Assignment Cover Generator in your web browser</li>
-                <li>You'll see a form on the left and preview on the right</li>
-                <li>Start by filling in your personal details</li>
-            </ol>
-        </div>
-
-        <div class="section">
-            <h2>📝 Filling the Form</h2>
-            <ul class="feature-list">
-                <li><strong>Student Name:</strong> Enter your full name as registered with the university</li>
-                <li><strong>University Roll No:</strong> Your official university registration number</li>
-                <li><strong>Class Roll No:</strong> Your class-specific roll number</li>
-                <li><strong>Semester:</strong> Select your current semester from the dropdown</li>
-                <li><strong>Subject:</strong> Enter the subject name for the assignment</li>
-                <li><strong>Course Code:</strong> Enter the official course code</li>
-                <li><strong>Submission Date:</strong> Select the assignment submission date</li>
-                <li><strong>Assignment Type:</strong> Choose from Assignment, Project, Lab Report, etc.</li>
-            </ul>
-            <div class="tip">
-                <strong>Pro Tip:</strong> All fields marked with * are mandatory and must be filled.
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>🎨 Customization Options</h2>
-            <ul class="feature-list">
-                <li><strong>Theme Colors:</strong> Choose from 5 professional color schemes
+            <ul>
+                <li>Fill in your details in the form on the left side</li>
+                <li>Required fields include:
                     <ul>
-                        <li>Default Blue - Professional and clean</li>
-                        <li>Forest Green - Environmental and natural</li>
-                        <li>Ruby Red - Bold and striking</li>
-                        <li>Royal Purple - Elegant and sophisticated</li>
-                        <li>Classic Black - Traditional and formal</li>
+                        <li>Student Name</li>
+                        <li>University Roll Number</li>
+                        <li>Class Roll Number</li>
+                        <li>Semester</li>
+                        <li>Subject and Course Code</li>
+                        <li>Submission Date</li>
+                        <li>Assignment Type</li>
                     </ul>
                 </li>
-                <li><strong>Templates:</strong> Select from 4 different layouts
+                <li>Choose your preferred template style from four options:
                     <ul>
                         <li>Classic - Traditional academic style</li>
-                        <li>Modern - Contemporary clean design</li>
-                        <li>Minimal - Simple and elegant</li>
-                        <li>Professional - Business-like appearance</li>
+                        <li>Modern - Clean and contemporary design</li>
+                        <li>Minimal - Simple and elegant layout</li>
+                        <li>Professional - Formal business-like appearance</li>
                     </ul>
                 </li>
+                <li>Select a theme color to match your institution's branding</li>
             </ul>
+            <div class="tip">
+                <strong>Pro Tip:</strong> Your form data is automatically saved every 30 seconds, so you won't lose your work!
+            </div>
         </div>
 
         <div class="section">
-            <h2>💾 Saving and Loading</h2>
-            <ul class="feature-list">
-                <li><strong>Save:</strong> Click 'Save' to store your details locally</li>
-                <li><strong>Load:</strong> Click 'Load' to recall previously saved information</li>
-                <li><strong>Reset:</strong> Use the reset button to clear all fields</li>
+            <h2>🎨 Customizing Your Cover</h2>
+            <ul>
+                <li>Preview your cover page in real-time on the right side</li>
+                <li>Quick template switching:
+                    <ul>
+                        <li>Click on template thumbnails for instant preview</li>
+                        <li>Swipe left/right on mobile devices</li>
+                        <li>Use arrow keys with Ctrl key for keyboard navigation</li>
+                    </ul>
+                </li>
+                <li>Adjust theme colors to match your preferences:
+                    <ul>
+                        <li>Default Blue - Traditional academic look</li>
+                        <li>Forest Green - Natural and professional</li>
+                        <li>Ruby Red - Bold and striking</li>
+                        <li>Royal Purple - Elegant and sophisticated</li>
+                        <li>Classic Black - Timeless and formal</li>
+                    </ul>
+                </li>
+                <li>Use the font size controls (+ and -) in the top-right corner to adjust text size</li>
             </ul>
             <div class="tip">
-                <strong>Note:</strong> Saved data persists even after closing the browser
+                <strong>Design Tip:</strong> Choose colors that complement your institution's official colors for a professional look.
             </div>
+        </div>
+
+        <div class="section">
+            <h2>💾 Managing Your Data</h2>
+            <ul>
+                <li>Auto-save: Your work is automatically saved every 30 seconds</li>
+                <li>Manual save: Click "Save" or use Ctrl + S to store your current form data</li>
+                <li>Load previous work: Use "Load" button or Ctrl + L to restore saved details</li>
+                <li>Reset form: Clear all fields using the reset button (↺) in the floating tools</li>
+                <li>Your data is securely stored in your browser's local storage</li>
+            </ul>
         </div>
 
         <div class="section">
             <h2>📤 Exporting Options</h2>
-            <ul class="feature-list">
-                <li><strong>PDF:</strong> Download as high-quality PDF document</li>
-                <li><strong>JPG:</strong> Save as image file</li>
-                <li><strong>Print:</strong> Direct printing option</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>⚡ Additional Features</h2>
-            <ul class="feature-list">
-                <li><strong>Dark Mode:</strong> Toggle between light and dark themes</li>
-                <li><strong>Font Size:</strong> Adjust text size using + and - buttons</li>
-                <li><strong>Share:</strong> Share the tool with others</li>
-                <li><strong>Mobile Friendly:</strong> Works on all devices</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>❗ Troubleshooting</h2>
-            <ul class="feature-list">
-                <li>If preview doesn't update, click "Generate" again</li>
-                <li>Clear browser cache if facing loading issues</li>
-                <li>Enable JavaScript for full functionality</li>
-                <li>Check internet connection for template loading</li>
+            <ul>
+                <li>PDF Export:
+                    <ul>
+                        <li>Best for digital submissions</li>
+                        <li>Maintains perfect formatting</li>
+                        <li>Compatible with all devices</li>
+                    </ul>
+                </li>
+                <li>JPG Export:
+                    <ul>
+                        <li>Ideal for sharing on platforms</li>
+                        <li>Easy to preview</li>
+                        <li>Universal compatibility</li>
+                    </ul>
+                </li>
+                <li>Print:
+                    <ul>
+                        <li>Direct printing with proper margins</li>
+                        <li>Preview before printing</li>
+                        <li>Works with any printer</li>
+                    </ul>
+                </li>
             </ul>
             <div class="tip">
-                <strong>Support:</strong> For additional help, contact: ajnishk261@gmail.com
+                <strong>Print Tip:</strong> Use A4 size paper for best results. Check "Background Graphics" in your browser's print settings for best quality.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⌨️ Keyboard Shortcuts</h2>
+            <div class="keyboard-shortcuts">
+                <span class="shortcut-key">Ctrl + Enter</span>
+                <span>Generate Cover</span>
+                <span class="shortcut-key">Ctrl + S</span>
+                <span>Save Form Data</span>
+                <span class="shortcut-key">Ctrl + L</span>
+                <span>Load Form Data</span>
+                <span class="shortcut-key">Ctrl + T</span>
+                <span>Toggle Theme</span>
+                <span class="shortcut-key">Ctrl + ←/→</span>
+                <span>Switch Templates</span>
+                <span class="shortcut-key">Ctrl + P</span>
+                <span>Print Cover</span>
+                <span class="shortcut-key">Esc</span>
+                <span>Close Modals</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🌙 Accessibility Features</h2>
+            <ul>
+                <li>Dark/Light theme toggle for comfortable viewing</li>
+                <li>Adjustable font sizes for better readability</li>
+                <li>Keyboard navigation support</li>
+                <li>Screen reader compatible</li>
+                <li>High contrast mode available</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>💡 Pro Tips</h2>
+            <ul>
+                <li>Use the template previews to quickly compare different styles</li>
+                <li>Save multiple versions for different subjects</li>
+                <li>Share your generated cover using the share button</li>
+                <li>Check the preview thoroughly before downloading</li>
+                <li>Keep your browser up-to-date for best performance</li>
+            </ul>
+            <div class="tip">
+                <strong>Remember:</strong> Your institution might have specific requirements for assignment covers. Always verify the format with your teachers.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Troubleshooting</h2>
+            <ul>
+                <li>Cover Generation Issues:
+                    <ul>
+                        <li>If the preview is not updating:
+                            <ul>
+                                <li>Check if all required fields are filled correctly</li>
+                                <li>Try switching templates to refresh the preview</li>
+                                <li>Clear your browser cache and reload the page</li>
+                            </ul>
+                        </li>
+                        <li>If the preview appears blank:
+                            <ul>
+                                <li>Ensure your browser is up to date</li>
+                                <li>Try disabling any ad-blockers temporarily</li>
+                                <li>Check your internet connection for logo loading</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>Download/Export Issues:
+                    <ul>
+                        <li>PDF not downloading:
+                            <ul>
+                                <li>Check if pop-ups are blocked in your browser</li>
+                                <li>Try using a different browser (Chrome recommended)</li>
+                                <li>Ensure you have enough storage space</li>
+                            </ul>
+                        </li>
+                        <li>Print quality issues:
+                            <ul>
+                                <li>Enable "Background Graphics" in print settings</li>
+                                <li>Set paper size to A4</li>
+                                <li>Choose "High Quality" in print settings</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>Data Management Issues:
+                    <ul>
+                        <li>If saved data isn't loading:
+                            <ul>
+                                <li>Check if your browser allows local storage</li>
+                                <li>Ensure you haven't cleared browser data recently</li>
+                                <li>Try saving the data again</li>
+                            </ul>
+                        </li>
+                        <li>Auto-save not working:
+                            <ul>
+                                <li>Check your browser's privacy settings</li>
+                                <li>Ensure you're not in private/incognito mode</li>
+                                <li>Try manual save as a temporary solution</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>Display/Layout Issues:
+                    <ul>
+                        <li>Text overflow problems:
+                            <ul>
+                                <li>Use the font size controls to adjust text size</li>
+                                <li>Try a different template</li>
+                                <li>Keep input text length reasonable</li>
+                            </ul>
+                        </li>
+                        <li>Mobile display issues:
+                            <ul>
+                                <li>Ensure your device is in portrait orientation</li>
+                                <li>Try zooming out if content is cut off</li>
+                                <li>Use the mobile-optimized templates</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="tip">
+                <strong>Need More Help?</strong> If you're still experiencing issues, try:
+                <ul>
+                    <li>Clearing your browser cache and cookies</li>
+                    <li>Using the latest version of Chrome, Firefox, or Edge</li>
+                    <li>Disabling browser extensions temporarily</li>
+                    <li>Contact support at: mailto:ajnishk261@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📱 Browser Compatibility</h2>
+            <ul>
+                <li>Recommended Browsers:
+                    <ul>
+                        <li>Google Chrome (latest version)</li>
+                        <li>Mozilla Firefox (latest version)</li>
+                        <li>Microsoft Edge (latest version)</li>
+                        <li>Safari (latest version)</li>
+                    </ul>
+                </li>
+                <li>Minimum Requirements:
+                    <ul>
+                        <li>JavaScript must be enabled</li>
+                        <li>Local Storage must be allowed</li>
+                        <li>Cookies should be enabled</li>
+                        <li>Stable internet connection</li>
+                    </ul>
+                </li>
+                <li>Mobile Support:
+                    <ul>
+                        <li>iOS 13+ on Safari</li>
+                        <li>Android 8+ on Chrome</li>
+                        <li>Responsive design for all screen sizes</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="tip">
+                <strong>Best Experience:</strong> For the optimal experience, use Google Chrome or Microsoft Edge with a desktop or laptop computer.
             </div>
         </div>
     </div>
+    <button class="scroll-to-top" id="scrollToTop" title="Scroll to top">↑</button>
+    <script>
+        // Scroll to top functionality
+        const scrollToTopButton = document.getElementById('scrollToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopButton.classList.add('visible');
+            } else {
+                scrollToTopButton.classList.remove('visible');
+            }
+        });
+
+        scrollToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Add smooth scrolling to all links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>

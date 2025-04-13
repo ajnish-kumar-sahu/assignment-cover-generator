@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="210mm" height="297mm" viewBox="0 0 210 297" xmlns="http://www.w3.org/2000/svg">
+  <rect width="210" height="297" fill="#fff"/>
+  <rect x="10" y="10" width="190" height="277" stroke="#1a237e" stroke-width="3" fill="none"/>
+  <rect x="30" y="30" width="150" height="40" fill="#f8f9fa"/>
+  <rect x="30" y="90" width="150" height="160" fill="#f8f9fa"/>
+  <text x="105" y="55" font-family="Arial" font-size="14" fill="#1a237e" text-anchor="middle">Professional Template</text>
+</svg>

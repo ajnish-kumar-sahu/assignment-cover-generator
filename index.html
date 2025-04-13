@@ -120,23 +120,170 @@
         .btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.75rem;
             padding: 0.875rem 1.5rem;
             border: none;
             border-radius: var(--radius-md);
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .btn-primary {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
             background: var(--primary-color);
             color: white;
+            min-width: 150px;
         }
 
-        .btn-primary:hover {
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+        }
+
+        .btn:hover {
             background: var(--secondary-color);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover::before {
+            animation: shine 1.5s;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: scale(1.1);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        .btn[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: var(--border-color);
+        }
+
+        .btn.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .btn:hover {
+                transform: none;
+            }
+            .btn.loading::after {
+                animation: none;
+            }
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        .btn.success {
+            animation: success 0.5s ease-in-out;
+            background: var(--success-color);
+        }
+
+        .action-buttons {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            margin-top: 1.5rem;
+        }
+
+        .action-buttons .btn {
+            width: 100%;
+            height: 45px;
+        }
+
+        @keyframes shine {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes success {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Button variants */
+        .btn-generate {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+
+        .btn-load {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #E91E63, #C2185B);
+        }
+
+        .btn-jpg {
+            background: linear-gradient(135deg, #3F51B5, #303F9F);
+        }
+
+        /* Loading state */
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn.loading i {
+            animation: spin 1s linear infinite;
         }
 
         .preview-section {
@@ -155,12 +302,6 @@
             border-radius: var(--radius-md);
             background: #fff;
             margin-bottom: 1.5rem;
-        }
-
-        .action-buttons {
-            display: grid;
-            gap: 1rem;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
         }
 
         .developer-footer {
@@ -227,8 +368,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.95);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10;
@@ -243,16 +385,46 @@
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(33, 150, 243, 0.3);
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(33, 150, 243, 0.2);
             border-radius: 50%;
             border-top-color: var(--primary-color);
-            animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .loading-text {
+            margin-top: 1rem;
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 1rem;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active .loading-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes loadingMessages {
+            0%, 100% { content: "Processing"; }
+            25% { content: "Processing."; }
+            50% { content: "Processing.."; }
+            75% { content: "Processing..."; }
+        }
+
+        .loading-text::after {
+            content: "Processing";
+            animation: loadingMessages 2s linear infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         .theme-toggle {
@@ -579,9 +751,222 @@
             font-size: 1.5rem;
             z-index: 2001;
         }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary-color);
+            transition: width 0.3s;
+            z-index: 2000;
+        }
+
+        /* Template Quick Preview */
+        .template-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--background-color);
+            border-radius: var(--radius-md);
+        }
+
+        .template-thumb {
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .template-thumb:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .template-thumb.active {
+            border-color: var(--primary-color);
+        }
+
+        .template-thumb img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Custom Color Picker */
+        .color-picker-wrapper {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .color-presets {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .color-preset {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+        }
+
+        /* Keyboard Shortcuts Modal */
+        .shortcuts-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            z-index: 2001;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .shortcuts-modal.active {
+            display: block;
+        }
+
+        .shortcut-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .shortcut-key {
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        /* Welcome Modal Styles */
+        .welcome-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 3000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .welcome-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .welcome-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            margin: auto;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .welcome-modal.active .welcome-content {
+            transform: translateY(0);
+        }
+
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .welcome-body {
+            margin-bottom: 2rem;
+        }
+
+        .welcome-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .welcome-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .welcome-btn.continue {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .welcome-btn.skip {
+            background: var(--border-color);
+            color: var(--text-color);
+        }
+
+        .welcome-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
     </style>
 </head>
 <body>
+    <!-- Add Welcome Modal -->
+    <div class="welcome-modal" id="welcomeModal">
+        <div class="welcome-content">
+            <div class="welcome-header">
+                <h2><span role="img" aria-label="wave">👋</span> Welcome to Assignment Cover Generator!</h2>
+            </div>
+            <div class="welcome-body">
+                <h3>Quick Guide:</h3>
+                <ul>
+                    <li>Fill in your details in the form</li>
+                    <li>Choose from multiple professional templates</li>
+                    <li>Preview your cover page in real-time</li>
+                    <li>Download as PDF or JPG, or print directly</li>
+                    <li>Save your details for future use</li>
+                </ul>
+                <div class="welcome-checkbox">
+                    <input type="checkbox" id="dontShowAgain">
+                    <label for="dontShowAgain">Don't show this again</label>
+                </div>
+            </div>
+            <div class="welcome-actions">
+                <button class="welcome-btn skip" onclick="skipWelcome(true)">Skip</button>
+                <button class="welcome-btn continue" onclick="continueToGuide()">How to Use</button>
+            </div>
+        </div>
+    </div>
+
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
     <button class="help-button" onclick="showHelp()" title="How to Use">
@@ -605,6 +990,7 @@
             <div class="form-container">
                 <div class="loading-overlay">
                     <div class="spinner"></div>
+                    <div class="loading-text">Loading...</div>
                 </div>
 
                 <section class="input-section">
@@ -655,11 +1041,31 @@
                         <div class="form-group">
                             <label for="assignmentType">📋 Assignment Type</label>
                             <select id="assignmentType" class="form-control" required>
-                                <option value="Assignment">Assignment</option>
-                                <option value="Project">Project</option>
-                                <option value="Lab Report">Lab Report</option>
-                                <option value="Case Study">Case Study</option>
-                                <option value="Term Paper">Term Paper</option>
+                                <optgroup label="Assignments">
+                                    <option value="Assignment">Regular Assignment</option>
+                                    <option value="Home Assignment">Home Assignment</option>
+                                    <option value="Group Assignment">Group Assignment</option>
+                                </optgroup>
+                                <optgroup label="Projects">
+                                    <option value="Project">Project Work</option>
+                                    <option value="Mini Project">Mini Project</option>
+                                    <option value="Major Project">Major Project</option>
+                                </optgroup>
+                                <optgroup label="Lab Work">
+                                    <option value="Lab Report">Lab Report</option>
+                                    <option value="Lab Manual">Lab Manual</option>
+                                    <option value="Practical File">Practical File</option>
+                                </optgroup>
+                                <optgroup label="Research">
+                                    <option value="Case Study">Case Study</option>
+                                    <option value="Term Paper">Term Paper</option>
+                                    <option value="Research Paper">Research Paper</option>
+                                </optgroup>
+                                <optgroup label="Others">
+                                    <option value="Presentation">Presentation</option>
+                                    <option value="Documentation">Documentation</option>
+                                    <option value="Report">Report</option>
+                                </optgroup>
                             </select>
                         </div>
 
@@ -685,13 +1091,13 @@
                         </div>
 
                         <div class="action-buttons">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-generate">
                                 <i class="fas fa-magic"></i> Generate
                             </button>
-                            <button class="btn btn-primary" onclick="saveFormData()">
+                            <button type="button" class="btn btn-save" onclick="saveFormData()">
                                 <i class="fas fa-save"></i> Save
                             </button>
-                            <button class="btn btn-primary" onclick="loadFormData()">
+                            <button type="button" class="btn btn-load" onclick="loadFormData()">
                                 <i class="fas fa-folder-open"></i> Load
                             </button>
                         </div>
@@ -702,13 +1108,13 @@
                     <h2>Preview 👀</h2>
                     <iframe id="previewFrame" class="preview-frame"></iframe>
                     <div class="action-buttons">
-                        <button class="btn btn-primary" onclick="printCover()">
+                        <button type="button" class="btn btn-print" onclick="printCover()">
                             <i class="fas fa-print"></i> Print
                         </button>
-                        <button class="btn btn-primary" onclick="downloadPDF()">
+                        <button type="button" class="btn btn-pdf" onclick="downloadPDF()">
                             <i class="fas fa-file-pdf"></i> PDF
                         </button>
-                        <button class="btn btn-primary" onclick="downloadJPG()">
+                        <button type="button" class="btn btn-jpg" onclick="downloadJPG()">
                             <i class="fas fa-image"></i> JPG
                         </button>
                     </div>
@@ -716,6 +1122,21 @@
             </div>
         </main>
 
+        <div class="template-thumbnails">
+            <div class="template-thumb active" data-template="classic">
+                <img src="path/to/classic-thumb.jpg" alt="Classic Template">
+            </div>
+            <div class="template-thumb" data-template="modern">
+                <img src="path/to/modern-thumb.jpg" alt="Modern Template">
+            </div>
+            <div class="template-thumb" data-template="minimal">
+                <img src="path/to/minimal-thumb.jpg" alt="Minimal Template">
+            </div>
+            <div class="template-thumb" data-template="professional">
+                <img src="path/to/professional-thumb.jpg" alt="Professional Template">
+            </div>
+        </div>
+    
         <footer class="developer-footer">
             <div class="developer-details">
                 <h3>Developed with ❤ by</h3>
@@ -763,6 +1184,30 @@
         <button class="tool-button" onclick="adjustFontSize('increase')" title="Increase Font Size">
             <i class="fas fa-plus"></i>
         </button>
+    </div>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="shortcuts-modal" id="shortcutsModal">
+        <h3>Keyboard Shortcuts</h3>
+        <div class="shortcut-list">
+            <div class="shortcut-item">
+                <span>Generate Cover</span>
+                <span class="shortcut-key">Ctrl + Enter</span>
+            </div>
+            <div class="shortcut-item">
+                <span>Save Form Data</span>
+                <span class="shortcut-key">Ctrl + S</span>
+            </div>
+            <div class="shortcut-item">
+                <span>Load Form Data</span>
+                <span class="shortcut-key">Ctrl + L</span>
+            </div>
+            <div class="shortcut-item">
+                <span>Toggle Theme</span>
+                <span class="shortcut-key">Ctrl + T</span>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -1436,44 +1881,136 @@
             return isValid;
         }
 
-        async function downloadPDF() {
-            showLoading();
-            try {
-                const previewFrame = document.getElementById('previewFrame');
-                const scale = 2; // Higher resolution for better quality
-                const canvas = await html2canvas(previewFrame.contentDocument.body, {
-                    scale: scale,
-                    useCORS: true,
-                    allowTaint: true,
-                    logging: false,
-                    scrollY: -window.scrollY
-                });
-
-                // Use blob for better memory management
-                canvas.toBlob(async (blob) => {
-                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                        // For IE/Edge
-                        window.navigator.msSaveOrOpenBlob(blob, 'assignment-cover.pdf');
-                    } else {
-                        const url = URL.createObjectURL(blob);
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.download = 'assignment-cover.pdf';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        URL.revokeObjectURL(url);
-                    }
-                }, 'image/jpeg', 1.0);
-                
-                showNotification('PDF downloaded successfully!');
-            } catch (error) {
-                console.error('PDF generation error:', error);
-                showNotification('Error generating PDF. Please try again.', 'error');
-            } finally {
-                hideLoading();
+        // Button state management
+        function setButtonState(button, state, message = '') {
+            button.disabled = state === 'loading';
+            
+            // Remove all state classes
+            button.classList.remove('loading', 'success', 'error');
+            
+            if (state === 'loading') {
+                button.classList.add('loading');
+                button.dataset.originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner"></i>';
+            } else if (state === 'success') {
+                button.classList.add('success');
+                showNotification(message || 'Action completed successfully!', 'success');
+                setTimeout(() => button.classList.remove('success'), 2000);
+            } else if (state === 'error') {
+                showNotification(message || 'An error occurred', 'error');
+            } else if (state === 'reset' && button.dataset.originalText) {
+                button.innerHTML = button.dataset.originalText;
             }
         }
+
+        // Update the action functions with new button states
+        async function downloadPDF() {
+            const button = document.querySelector('.btn-pdf');
+            try {
+                setButtonState(button, 'loading');
+                updateProgress(0);
+                
+                const previewFrame = document.getElementById('previewFrame');
+                const canvas = await html2canvas(previewFrame.contentDocument.body, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false
+                });
+                
+                updateProgress(50);
+                
+                canvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'assignment-cover.pdf';
+                    link.click();
+                    URL.revokeObjectURL(url);
+                    
+                    setButtonState(button, 'success', 'PDF downloaded successfully!');
+                    updateProgress(100);
+                }, 'image/jpeg', 1.0);
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                setButtonState(button, 'error', 'Error generating PDF');
+            } finally {
+                setTimeout(() => setButtonState(button, 'reset'), 2000);
+            }
+        }
+
+        async function downloadJPG() {
+            const button = document.querySelector('.btn-jpg');
+            try {
+                setButtonState(button, 'loading');
+                
+                const previewFrame = document.getElementById('previewFrame');
+                const canvas = await html2canvas(previewFrame.contentDocument.body);
+                const link = document.createElement('a');
+                link.download = 'assignment-cover.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 1.0);
+                link.click();
+                
+                setButtonState(button, 'success', 'Image downloaded successfully!');
+            } catch (error) {
+                console.error('JPG generation error:', error);
+                setButtonState(button, 'error', 'Error generating image');
+            } finally {
+                setTimeout(() => setButtonState(button, 'reset'), 2000);
+            }
+        }
+
+        function saveFormData() {
+            const button = document.querySelector('.btn-save');
+            try {
+                setButtonState(button, 'loading');
+                
+                const formData = {
+                    studentName: document.getElementById('studentName').value,
+                    rollNumber: document.getElementById('rollNumber').value,
+                    classRoll: document.getElementById('classRoll').value,
+                    semester: document.getElementById('semester').value,
+                    subject: document.getElementById('subject').value,
+                    courseCode: document.getElementById('courseCode').value,
+                    submissionDate: document.getElementById('submissionDate').value,
+                    assignmentType: document.getElementById('assignmentType').value,
+                    themeColor: document.getElementById('themeColor').value,
+                    template: document.getElementById('template').value
+                };
+                
+                localStorage.setItem('coverGeneratorData', JSON.stringify(formData));
+                setButtonState(button, 'success', 'Data saved successfully!');
+            } catch (err) {
+                console.error('Save failed:', err);
+                setButtonState(button, 'error', 'Unable to save data');
+            } finally {
+                setTimeout(() => setButtonState(button, 'reset'), 2000);
+            }
+        }
+
+        // Update button ripple effect
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const rect = button.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                const diameter = Math.max(rect.width, rect.height);
+                const radius = diameter / 2;
+
+                ripple.style.width = ripple.style.height = `${diameter}px`;
+                ripple.style.left = `${e.clientX - rect.left - radius}px`;
+                ripple.style.top = `${e.clientY - rect.top - radius}px`;
+                ripple.className = 'ripple';
+
+                const existingRipple = button.querySelector('.ripple');
+                if (existingRipple) {
+                    existingRipple.remove();
+                }
+
+                button.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
 
         async function downloadJPG() {
             showLoading();
@@ -1506,28 +2043,6 @@
             } catch (err) {
                 console.error('Print failed:', err);
                 showNotification('Unable to print. Please try again.', 'error');
-            }
-        }
-
-        function saveFormData() {
-            try {
-                const formData = {
-                    studentName: document.getElementById('studentName').value,
-                    rollNumber: document.getElementById('rollNumber').value,
-                    classRoll: document.getElementById('classRoll').value,
-                    semester: document.getElementById('semester').value,
-                    subject: document.getElementById('subject').value,
-                    courseCode: document.getElementById('courseCode').value,
-                    submissionDate: document.getElementById('submissionDate').value,
-                    assignmentType: document.getElementById('assignmentType').value,
-                    themeColor: document.getElementById('themeColor').value,
-                    template: document.getElementById('template').value
-                };
-                localStorage.setItem('coverGeneratorData', JSON.stringify(formData));
-                showNotification('Data saved successfully!');
-            } catch (err) {
-                console.error('Save failed:', err);
-                showNotification('Unable to save data', 'error');
             }
         }
 
@@ -1618,6 +2133,20 @@
                 showNotification('Unable to copy link', 'error');
             }
             document.body.removeChild(textArea);
+        }
+
+        function resetForm() {
+            document.getElementById('coverForm').reset();
+            generateCoverPage();
+            showNotification('Form reset successfully!');
+        }
+
+        function showHelp() {
+            document.getElementById('helpModal').classList.add('active');
+        }
+
+        function hideHelp() {
+            document.getElementById('helpModal').classList.remove('active');
         }
 
         document.querySelectorAll('.template-option').forEach(option => {
@@ -1733,6 +2262,339 @@
             if (e.key === 'Escape') {
                 hideHelp();
             }
+        });
+
+        // Auto-save form data every 30 seconds
+        setInterval(() => {
+            saveFormData();
+        }, 30000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey) {
+                switch(e.key.toLowerCase()) {
+                    case 'enter':
+                        e.preventDefault();
+                        document.getElementById('coverForm').dispatchEvent(new Event('submit'));
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        saveFormData();
+                        break;
+                    case 'l':
+                        e.preventDefault();
+                        loadFormData();
+                        break;
+                    case 't':
+                        e.preventDefault();
+                        toggleTheme();
+                        break;
+                    case 'k':
+                        e.preventDefault();
+                        document.getElementById('shortcutsModal').classList.toggle('active');
+                        break;
+                }
+            }
+        });
+
+        // Progress bar for downloads
+        function updateProgress(progress) {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = `${progress}%`;
+            if (progress === 100) {
+                setTimeout(() => {
+                    progressBar.style.width = '0';
+                }, 500);
+            }
+        }
+
+        // Template quick preview
+        document.querySelectorAll('.template-thumb').forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                document.querySelectorAll('.template-thumb').forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+                document.getElementById('template').value = thumb.dataset.template;
+                generateCoverPage();
+            });
+        });
+
+        // Enhanced keyboard shortcuts with browser compatibility
+        const shortcuts = {
+            submit: { key: 'Enter', ctrl: true, description: 'Generate Cover' },
+            save: { key: 's', ctrl: true, description: 'Save Form Data' },
+            load: { key: 'l', ctrl: true, description: 'Load Form Data' },
+            theme: { key: 't', ctrl: true, description: 'Toggle Theme' },
+            help: { key: 'h', ctrl: true, description: 'Show Help' },
+            reset: { key: 'r', ctrl: true, description: 'Reset Form' },
+            print: { key: 'p', ctrl: true, description: 'Print Cover' }
+        };
+
+        // Auto-save with error handling
+        let autoSaveInterval;
+        let lastSaveTime = Date.now();
+
+        function startAutoSave() {
+            if (autoSaveInterval) clearInterval(autoSaveInterval);
+            
+            autoSaveInterval = setInterval(() => {
+                try {
+                    if (document.visibilityState === 'visible' && formHasChanges()) {
+                        saveFormData();
+                        lastSaveTime = Date.now();
+                    }
+                } catch (error) {
+                    console.error('Auto-save failed:', error);
+                    clearInterval(autoSaveInterval);
+                    showNotification('Auto-save disabled due to error', 'error');
+                }
+            }, 30000);
+        }
+
+        function formHasChanges() {
+            const currentData = getFormData();
+            const savedData = localStorage.getItem('coverGeneratorData');
+            return !savedData || JSON.stringify(currentData) !== savedData;
+        }
+
+        function getFormData() {
+            const form = document.getElementById('coverForm');
+            const formData = new FormData(form);
+            return Object.fromEntries(formData.entries());
+        }
+
+        // Update template thumbnails
+        document.querySelectorAll('.template-thumb img').forEach(img => {
+            const template = img.parentElement.dataset.template;
+            img.src = `thumbs/${template}.svg`;
+            img.onerror = () => {
+                img.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjgwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI4MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTQwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVtcGxhdGUgUHJldmlldzwvdGV4dD48L3N2Zz4=';
+            };
+        });
+
+        // Initialize shortcuts
+        document.addEventListener('DOMContentLoaded', () => {
+            // Update shortcuts modal with all available shortcuts
+            const shortcutList = document.querySelector('.shortcut-list');
+            shortcutList.innerHTML = Object.entries(shortcuts)
+                .map(([action, config]) => `
+                    <div class="shortcut-item">
+                        <span>${config.description}</span>
+                        <span class="shortcut-key">${config.ctrl ? 'Ctrl + ' : ''}${config.key.toUpperCase()}</span>
+                    </div>
+                `).join('');
+
+            // Start auto-save
+            startAutoSave();
+
+            // Handle visibility change
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    startAutoSave();
+                } else {
+                    clearInterval(autoSaveInterval);
+                }
+            });
+        });
+
+        // Enhanced keyboard shortcut handler
+        document.addEventListener('keydown', (e) => {
+            // Check if user is typing in an input field
+            if (e.target.matches('input, textarea')) return;
+
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+            const modifier = isMac ? e.metaKey : e.ctrlKey;
+
+            for (const [action, config] of Object.entries(shortcuts)) {
+                if (e.key.toLowerCase() === config.key.toLowerCase() && 
+                    modifier === config.ctrl) {
+                    e.preventDefault();
+                    handleShortcut(action);
+                    break;
+                }
+            }
+        });
+
+        function handleShortcut(action) {
+            switch(action) {
+                case 'submit':
+                    document.getElementById('coverForm').dispatchEvent(new Event('submit'));
+                    break;
+                case 'save':
+                    saveFormData();
+                    break;
+                case 'load':
+                    loadFormData();
+                    break;
+                case 'theme':
+                    toggleTheme();
+                    break;
+                case 'help':
+                    showHelp();
+                    break;
+                case 'reset':
+                    resetForm();
+                    break;
+                case 'print':
+                    printCover();
+                    break;
+            }
+        }
+
+        /* Template thumbnails fix */
+        const templateThumbnails = {
+            classic: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMTAgMjk3IiBmaWxsPSJub25lIj48cmVjdCB3aWR0aD0iMjEwIiBoZWlnaHQ9IjI5NyIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0yMCAyMGgxNzB2NDBoLTE3MHoiIGZpbGw9IiMxYTIzN2UiLz48dGV4dCB4PSIxMDUiIHk9IjQ1IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNsYXNzaWMgVGVtcGxhdGU8L3RleHQ+PHJlY3QgeD0iMzAiIHk9IjgwIiB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE3MCIgZmlsbD0iI2Y1ZjVmNSIvPjwvc3ZnPg==',
+            modern: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMTAgMjk3IiBmaWxsPSJub25lIj48cmVjdCB3aWR0aD0iMjEwIiBoZWlnaHQ9IjI5NyIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0wIDBoMjEwdjgwaC0yMTB6IiBmaWxsPSIjMWEyMzdlIi8+PHRleHQgeD0iMTA1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Nb2Rlcm4gVGVtcGxhdGU8L3RleHQ+PC9zdmc+',
+            minimal: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMTAgMjk3IiBmaWxsPSJub25lIj48cmVjdCB3aWR0aD0iMjEwIiBoZWlnaHQ9IjI5NyIgZmlsbD0iI2ZmZiIvPjx0ZXh0IHg9IjEwNSIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzAwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TWluaW1hbCBUZW1wbGF0ZTwvdGV4dD48bGluZSB4MT0iMjAiIHkxPSI2MCIgeDI9IjE5MCIgeTI9IjYwIiBzdHJva2U9IiMxYTIzN2UiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==',
+            professional: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMTAgMjk3IiBmaWxsPSJub25lIj48cmVjdCB3aWR0aD0iMjEwIiBoZWlnaHQ9IjI5NyIgZmlsbD0iI2ZmZiIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjE5MCIgaGVpZ2h0PSIyNzciIHN0cm9rZT0iIzFhMjM3ZSIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+PHRleHQgeD0iMTA1IiB5PSI0NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjMWEyMzdlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Qcm9mZXNzaW9uYWwgVGVtcGxhdGU8L3RleHQ+PC9zdmc+'
+        };
+
+        // Update template thumbnails with base64 images
+        document.querySelectorAll('.template-thumb img').forEach(img => {
+            const template = img.parentElement.dataset.template;
+            if (template && templateThumbnails[template]) {
+                img.src = templateThumbnails[template];
+                img.alt = `${template.charAt(0).toUpperCase() + template.slice(1)} Template Preview`;
+            }
+        });
+
+        // Update template switching logic
+        function switchTemplate(direction) {
+            const templates = ['classic', 'modern', 'minimal', 'professional'];
+            const current = document.getElementById('template').value;
+            const currentIndex = templates.indexOf(current);
+            let newIndex;
+
+            if (direction === 'next') {
+                newIndex = (currentIndex + 1) % templates.length;
+            } else {
+                newIndex = (currentIndex - 1 + templates.length) % templates.length;
+            }
+
+            // Update template selection and thumbnail
+            document.getElementById('template').value = templates[newIndex];
+            document.querySelectorAll('.template-thumb').forEach(thumb => {
+                thumb.classList.remove('active');
+                if (thumb.dataset.template === templates[newIndex]) {
+                    thumb.classList.add('active');
+                }
+            });
+            
+            generateCoverPage();
+        }
+
+        // Update template thumbnails styling
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                .template-thumbnails {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                    gap: 1rem;
+                    margin: 1rem 0;
+                    padding: 1rem;
+                    background: var(--background-color);
+                    border-radius: var(--radius-md);
+                }
+
+                .template-thumb {
+                    cursor: pointer;
+                    border: 2px solid var(--border-color);
+                    border-radius: var(--radius-md);
+                    overflow: hidden;
+                    transition: var(--transition);
+                    aspect-ratio: 210/297;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .template-thumb:hover {
+                    transform: translateY(-2px);
+                    box-shadow: var(--shadow-md);
+                    border-color: var(--primary-color);
+                }
+
+                .template-thumb.active {
+                    border-color: var(--primary-color);
+                    background: var(--primary-color)10;
+                }
+
+                .template-thumb img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+
+                @media (max-width: 768px) {
+                    .template-thumbnails {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+            </style>
+        `);
+
+        // Welcome Modal Functions
+        function showWelcomeModal() {
+            const welcomeModal = document.getElementById('welcomeModal');
+            if (welcomeModal) {
+                // Check if user has previously chosen to not show the modal
+                const dontShowAgain = localStorage.getItem('dontShowWelcomeModal');
+                if (!dontShowAgain) {
+                    welcomeModal.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+        }
+
+        function skipWelcome(dontShowAgain = false) {
+            const welcomeModal = document.getElementById('welcomeModal');
+            if (welcomeModal) {
+                welcomeModal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                
+                if (dontShowAgain) {
+                    localStorage.setItem('dontShowWelcomeModal', 'true');
+                }
+            }
+        }
+
+        function continueToGuide() {
+            skipWelcome();
+            showHelp();
+        }
+
+        // Initialize welcome modal when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // ...existing code...
+            showWelcomeModal(); // Add this line to show welcome modal on page load
+            
+            // Handle "Don't show again" checkbox
+            const dontShowAgainCheckbox = document.getElementById('dontShowAgain');
+            if (dontShowAgainCheckbox) {
+                dontShowAgainCheckbox.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        localStorage.setItem('dontShowWelcomeModal', 'true');
+                    } else {
+                        localStorage.removeItem('dontShowWelcomeModal');
+                    }
+                });
+            }
+
+            // Close modal when clicking outside
+            const welcomeModal = document.getElementById('welcomeModal');
+            if (welcomeModal) {
+                welcomeModal.addEventListener('click', (e) => {
+                    if (e.target === welcomeModal) {
+                        skipWelcome();
+                    }
+                });
+            }
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && welcomeModal.classList.contains('active')) {
+                    skipWelcome();
+                }
+            });
         });
     </script>
 </body>
