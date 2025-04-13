@@ -29,7 +29,13 @@ The Assignment Cover Generator is a powerful tool designed to streamline the pro
 
 ### 2. Modern Template
 
+<<<<<<< HEAD
 ![Modern Template](./thumbs/modern.svg)
+=======
+**Ajnish Kumar**  
+BCA 3rd Semester  
+Vinoba Bhave University hazaribag,jharkhand
+>>>>>>> 82203b2f680544de728d9ddca1de1654a2d712b5
 
 - Contemporary design elements
 - Clean and minimalist approach
@@ -230,6 +236,7 @@ npm run coverage
 
 ## 👨‍💻 Developer Profile
 
+<<<<<<< HEAD
 <div align="center">
   <img src="https://github.com/ajnish-kumar-sahu.png" alt="Ajnish Kumar" width="200" style="border-radius: 50%; margin-bottom: 20px;"/>
   
@@ -286,3 +293,9 @@ April 14, 2025
 
 ---
 <div style="text-align: center">Made with ❤️ by Ajnish Kumar</div>
+=======
+[View Live Demo](https://ajnish-kumar-sahu.github.io/assignment-cover-generator/)
+
+--------------------------------------------------------------------------------------------
+Made with ❤️ by Ajnish Kumar
+>>>>>>> 82203b2f680544de728d9ddca1de1654a2d712b5
