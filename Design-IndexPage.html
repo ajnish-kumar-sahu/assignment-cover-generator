@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Index Page Designer — Academic Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #6366f1; --primary-light: #818cf8; --primary-dark: #4f46e5;
+      --secondary: #14b8a6; --accent: #f59e0b;
+      --success: #22c55e; --error: #ef4444;
+      --bg: #f0f2f5;
+      --surface: rgba(255,255,255,0.72); --surface-solid: #fff;
+      --text: #1e293b; --text-sec: #64748b; --text-muted: #94a3b8;
+      --radius: 16px; --glass-blur: 16px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --bg-gradient-1: #e0e7ff; --bg-gradient-2: #fce7f3; --bg-gradient-3: #ccfbf1;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', sans-serif; min-height: 100vh;
+      background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden;
+    }
+    body::before {
+      content:''; position: fixed; inset:0; z-index:-1;
+      background: radial-gradient(ellipse 80% 60% at 20% 30%, var(--bg-gradient-1) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 20%, var(--bg-gradient-2) 0%, transparent 50%),
+        radial-gradient(ellipse 70% 50% at 50% 80%, var(--bg-gradient-3) 0%, transparent 50%);
+      animation: bgShift 20s ease-in-out infinite alternate;
+    }
+    @keyframes bgShift { 0%{transform:scale(1)} 50%{transform:scale(1.05) translate(-2%,1%)} 100%{transform:scale(1)} }
+    @keyframes fadeInUp { from{opacity:0;transform:translateY(25px)} to{opacity:1;transform:translateY(0)} }
+
+    .container { max-width:900px; margin:0 auto; padding:1.5rem; }
+
+    /* Header */
+    .page-header {
+      text-align:center; padding:2rem; border-radius:var(--radius);
+      background:var(--surface); backdrop-filter:blur(var(--glass-blur));
+      border:1px solid rgba(255,255,255,0.4); box-shadow:0 10px 40px rgba(0,0,0,0.08);
+      margin-bottom:1.5rem; animation:fadeInUp .7s var(--ease) both;
+    }
+    .page-header h1 {
+      font-size:2rem; font-weight:800;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .page-header p { color:var(--text-sec); font-size:.95rem; margin-top:.25rem; }
+
+    .back-link {
+      display:inline-flex; align-items:center; gap:.5rem; color:var(--primary); text-decoration:none;
+      font-weight:500; font-size:.85rem; margin-top:.75rem; padding:.35rem .8rem;
+      border-radius:8px; background:rgba(99,102,241,.08); transition:all .25s;
+    }
+    .back-link:hover { background:rgba(99,102,241,.15); transform:translateY(-1px); }
+
+    /* Glass card */
+    .glass-card {
+      background:var(--surface); backdrop-filter:blur(var(--glass-blur));
+      border:1px solid rgba(255,255,255,0.4); border-radius:var(--radius);
+      padding:1.75rem; box-shadow:0 10px 40px rgba(0,0,0,0.08);
+      margin-bottom:1.5rem; animation:fadeInUp .7s var(--ease) both;
+    }
+    .glass-card:nth-child(2) { animation-delay:.1s; }
+    .glass-card:nth-child(3) { animation-delay:.2s; }
+
+    .card-title {
+      font-size:1.05rem; font-weight:700; margin-bottom:1.25rem;
+      display:flex; align-items:center; gap:.5rem;
+    }
+    .card-title i { color:var(--primary); }
+
+    /* Form */
+    .form-group { position:relative; margin-bottom:1.25rem; }
+    .form-group label {
+      position:absolute; left:1rem; top:50%; transform:translateY(-50%);
+      font-size:.9rem; font-weight:500; color:var(--text-muted);
+      pointer-events:none; transition:all .2s var(--ease);
+      background:transparent; padding:0 .25rem; z-index:1;
+    }
+    .form-group .fc:focus ~ label,
+    .form-group .fc:not(:placeholder-shown) ~ label,
+    .form-group textarea.fc ~ label { /* textarea always float */
+      top:0; transform:translateY(-50%); font-size:.72rem; font-weight:600; color:var(--primary);
+      background:var(--surface-solid); padding:0 .5rem; border-radius:4px;
+    }
+    .fc {
+      width:100%; padding:.85rem 1rem; border:2px solid rgba(0,0,0,.08); border-radius:12px;
+      font-size:.92rem; font-family:inherit; background:var(--surface-solid); color:var(--text);
+      transition:all .2s var(--ease);
+    }
+    .fc:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 4px rgba(99,102,241,.1); }
+    textarea.fc { resize:vertical; min-height:80px; padding-top:1.2rem; }
+
+    .input-row { display:flex; gap:.75rem; }
+    .input-row .form-group { flex:1; }
+    .input-row .form-group.small { flex:0 0 120px; }
+
+    .btn-row { display:flex; gap:.6rem; flex-wrap:wrap; }
+
+    /* Buttons */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      padding:.7rem 1.2rem; border:none; border-radius:10px; font-weight:600; font-size:.85rem;
+      font-family:inherit; cursor:pointer; position:relative; overflow:hidden;
+      transition:all .25s var(--ease); min-width:120px;
+    }
+    .btn::before {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(120deg,transparent,rgba(255,255,255,.25),transparent);
+      transform:translateX(-100%); transition:transform .6s;
+    }
+    .btn:hover::before { transform:translateX(100%); }
+    .btn:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.1); }
+    .btn:active { transform:translateY(0) scale(.98); }
+
+    .btn-primary { background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff; }
+    .btn-danger { background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; }
+    .btn-secondary { background:rgba(0,0,0,.06); color:var(--text-sec); }
+    .btn-pdf { background:linear-gradient(135deg,#ec4899,#db2777); color:#fff; }
+    .btn-jpg { background:linear-gradient(135deg,#3b82f6,#2563eb); color:#fff; }
+    .btn-print { background:linear-gradient(135deg,#a855f7,#7c3aed); color:#fff; }
+    .btn-copy { background:linear-gradient(135deg,var(--secondary),#0d9488); color:#fff; }
+
+    /* Question list */
+    .q-list { margin-top:.75rem; }
+    .q-item {
+      display:flex; align-items:center; gap:.75rem; padding:.7rem .9rem;
+      background:rgba(99,102,241,.04); border:1px solid rgba(99,102,241,.08);
+      border-radius:10px; margin-bottom:.5rem; animation:fadeInUp .3s var(--ease) both;
+      font-size:.88rem;
+    }
+    .q-num { min-width:28px; height:28px; border-radius:50%; background:var(--primary); color:#fff;
+      display:flex; align-items:center; justify-content:center; font-size:.72rem; font-weight:700; flex-shrink:0; }
+    .q-text { flex:1; color:var(--text); }
+    .q-page { color:var(--primary); font-weight:600; font-size:.8rem; flex-shrink:0; }
+    .q-del { width:28px; height:28px; border-radius:50%; border:none; cursor:pointer;
+      background:rgba(239,68,68,.08); color:var(--error); display:flex; align-items:center;
+      justify-content:center; font-size:.75rem; transition:all .2s; flex-shrink:0; }
+    .q-del:hover { background:var(--error); color:#fff; transform:scale(1.1); }
+
+    /* Preview */
+    .preview-container {
+      background:#fff; border-radius:12px; padding:1.5rem;
+      box-shadow:inset 0 2px 8px rgba(0,0,0,.04); min-height:200px;
+      font-family:'Inter',sans-serif; overflow-x:auto;
+    }
+    .preview-container table { width:100%; border-collapse:collapse; }
+    .preview-container th {
+      padding:10px 14px; background:rgba(99,102,241,.06); color:var(--primary);
+      font-weight:600; font-size:.82rem; text-align:left;
+      border:1px solid rgba(99,102,241,.1);
+    }
+    .preview-container td {
+      padding:10px 14px; border:1px solid #eee; font-size:.85rem; color:var(--text);
+    }
+    .preview-container tr:nth-child(even) td { background:#fafaff; }
+    .preview-header-text { text-align:center; margin-bottom:1rem; }
+    .preview-header-text h2 { font-size:1.2rem; color:var(--primary); margin-bottom:2px; }
+    .preview-header-text p { font-size:.82rem; color:var(--text-sec); }
+
+    .export-row { display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1.25rem; }
+
+    /* Output table (for print/export) */
+    .output-section {
+      background:#fff; padding:20mm; width:210mm; margin:0 auto; display:none;
+      font-family:'Inter',sans-serif;
+    }
+    .output-section.visible { display:block; }
+    .output-section .out-header { text-align:center; margin-bottom:20px; padding:20px; background:linear-gradient(135deg,#f8f9fa,#fff);
+      border-radius:10px 10px 0 0; border-bottom:3px solid #1a237e; }
+    .output-section .out-title { font-size:28px; font-weight:700; color:#1a237e; }
+    .output-section .out-sub { font-size:18px; color:#303f9f; margin-top:4px; }
+    .output-section table { width:100%; border-collapse:collapse; background:#fff; }
+    .output-section th { padding:14px; background:#f8f9fa; color:#1a237e; font-weight:600; border:1px solid #e0e0e0; font-size:15px; }
+    .output-section td { padding:14px; border:1px solid #e0e0e0; font-size:14px; }
+    .output-section tr:nth-child(even) { background:#eae5e5; }
+
+    /* Modal */
+    .modal-bg {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);
+      backdrop-filter:blur(4px); z-index:3000;
+    }
+    .modal-bg.active { display:flex; align-items:center; justify-content:center; }
+    .modal-card {
+      background:var(--surface-solid); padding:2rem; border-radius:var(--radius);
+      max-width:400px; width:90%; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,.15);
+    }
+    .modal-card h3 { font-size:1.1rem; margin-bottom:.5rem; color:var(--error); }
+    .modal-card p { font-size:.88rem; color:var(--text-sec); margin-bottom:1.25rem; }
+    .modal-btns { display:flex; gap:.6rem; justify-content:center; }
+
+    /* Toast */
+    .toast {
+      position:fixed; bottom:24px; right:24px; padding:.8rem 1.3rem; border-radius:10px;
+      color:#fff; font-weight:600; font-size:.85rem; z-index:10000;
+      transform:translateY(100px); opacity:0; transition:all .4s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow:0 10px 40px rgba(0,0,0,.15); display:flex; align-items:center; gap:.5rem;
+    }
+    .toast.success { background:linear-gradient(135deg,#22c55e,#16a34a); }
+    .toast.show { transform:translateY(0); opacity:1; }
+
+    /* Print */
+    @media print {
+      body::before, .page-header, .glass-card:not(.output-card), .modal-bg, .toast { display:none !important; }
+      .output-section { display:block !important; padding:15mm; width:auto; }
+      body { background:#fff !important; }
+      @page { size:A4; margin:15mm; }
+    }
+
+    /* Responsive */
+    @media (max-width:768px) {
+      .container { padding:.75rem; }
+      .page-header { padding:1.25rem; }
+      .page-header h1 { font-size:1.5rem; }
+      .glass-card { padding:1.25rem; }
+      .input-row { flex-direction:column; }
+      .input-row .form-group.small { flex:1; }
+      .btn { min-width:100px; padding:.6rem 1rem; font-size:.82rem; }
+      .btn-row, .export-row { flex-direction:column; }
+      .btn-row .btn, .export-row .btn { width:100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="page-header">
+      <h1>Index Page Designer</h1>
+      <p>Design organized index pages for assignments</p>
+      <a href="main.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Tools</a>
+    </header>
+
+    <!-- Input Panel -->
+    <div class="glass-card">
+      <div class="card-title"><i class="fas fa-edit"></i> Configure Index</div>
+      <div class="form-group">
+        <input type="text" id="subjectTitle" class="fc" placeholder=" " />
+        <label for="subjectTitle">📖 Subject Title</label>
+      </div>
+      <div class="input-row">
+        <div class="form-group">
+          <textarea id="newQuestion" class="fc" placeholder=" "></textarea>
+          <label for="newQuestion">📝 Question / Topic</label>
+        </div>
+        <div class="form-group small">
+          <input type="number" id="pageNumber" class="fc" placeholder=" " min="1" />
+          <label for="pageNumber">📄 Page</label>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="addQuestion()"><i class="fas fa-plus"></i> Add</button>
+        <button class="btn btn-danger" onclick="showDeleteModal()"><i class="fas fa-trash"></i> Clear All</button>
+      </div>
+      <div class="q-list" id="questionList"></div>
+    </div>
+
+    <!-- Preview -->
+    <div class="glass-card">
+      <div class="card-title"><i class="fas fa-eye"></i> Preview</div>
+      <div class="preview-container" id="previewContainer">
+        <div class="preview-header-text">
+          <h2 id="previewTitle">Assignment Title</h2>
+          <p>Assignment Index</p>
+        </div>
+        <table>
+          <thead><tr><th>Q. No.</th><th>Question</th><th>Page No.</th><th>Teacher's Sign</th></tr></thead>
+          <tbody id="previewBody"></tbody>
+        </table>
+      </div>
+      <div class="export-row">
+        <button class="btn btn-pdf" onclick="downloadAsPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+        <button class="btn btn-jpg" onclick="downloadAsJPG()"><i class="fas fa-image"></i> JPG</button>
+        <button class="btn btn-print" onclick="doPrint()"><i class="fas fa-print"></i> Print</button>
+        <button class="btn btn-copy" onclick="copyContent()"><i class="fas fa-copy"></i> Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output section for export (hidden) -->
+  <div class="output-section" id="outputSection">
+    <div class="out-header">
+      <div class="out-title" id="outTitle">Assignment Title</div>
+      <div class="out-sub">Assignment Index</div>
+    </div>
+    <table>
+      <thead><tr><th>Q. No.</th><th>Question</th><th>Page No.</th><th>Teacher's Sign</th></tr></thead>
+      <tbody id="outBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Delete Modal -->
+  <div class="modal-bg" id="deleteModal">
+    <div class="modal-card">
+      <h3><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
+      <p>Are you sure you want to delete all questions?<br>This action cannot be undone.</p>
+      <div class="modal-btns">
+        <button class="btn btn-secondary" onclick="hideDeleteModal()"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn btn-danger" onclick="clearAll()"><i class="fas fa-trash"></i> Delete All</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const questions = [];
+
+    // ── Subject Title ──────────────────────────
+    document.getElementById('subjectTitle').addEventListener('input', (e) => {
+      const val = e.target.value || 'Assignment Title';
+      document.getElementById('previewTitle').textContent = val;
+      document.getElementById('outTitle').textContent = val;
+    });
+
+    // ── Add Question ───────────────────────────
+    function addQuestion() {
+      const text = document.getElementById('newQuestion').value.trim();
+      const page = document.getElementById('pageNumber').value.trim();
+      if (!text) return;
+      questions.push({ text, page });
+      document.getElementById('newQuestion').value = '';
+      document.getElementById('pageNumber').value = '';
+      render();
+    }
+
+    // ── Render Everything ──────────────────────
+    function render() {
+      renderList();
+      renderPreview();
+      renderOutput();
+    }
+
+    function renderList() {
+      const list = document.getElementById('questionList');
+      list.innerHTML = questions.map((q, i) => `
+        <div class="q-item" style="animation-delay:${i * 0.05}s">
+          <div class="q-num">${i + 1}</div>
+          <div class="q-text">${q.text}</div>
+          ${q.page ? `<div class="q-page">P.${q.page}</div>` : ''}
+          <button class="q-del" onclick="removeQuestion(${i})" title="Delete"><i class="fas fa-times"></i></button>
+        </div>
+      `).join('');
+    }
+
+    function renderPreview() {
+      const body = document.getElementById('previewBody');
+      body.innerHTML = questions.map((q, i) => `
+        <tr><td>${i + 1}</td><td>${q.text}</td><td>${q.page}</td><td></td></tr>
+      `).join('');
+    }
+
+    function renderOutput() {
+      const body = document.getElementById('outBody');
+      body.innerHTML = questions.map((q, i) => `
+        <tr><td style="text-align:center;color:#1a237e;font-weight:500">${i + 1}</td><td>${q.text}</td><td>${q.page}</td><td></td></tr>
+      `).join('');
+    }
+
+    // ── Remove / Clear ─────────────────────────
+    function removeQuestion(idx) {
+      questions.splice(idx, 1);
+      render();
+    }
+
+    function showDeleteModal() { document.getElementById('deleteModal').classList.add('active'); }
+    function hideDeleteModal() { document.getElementById('deleteModal').classList.remove('active'); }
+
+    function clearAll() {
+      questions.length = 0;
+      render();
+      hideDeleteModal();
+      showToast('All questions cleared');
+    }
+
+    // ── Downloads ──────────────────────────────
+    async function downloadAsPDF() {
+      const out = document.getElementById('outputSection');
+      out.style.display = 'block';
+      try {
+        const canvas = await html2canvas(out, { scale: 2, useCORS: true, logging: false });
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4', compress: true });
+        const img = canvas.toDataURL('image/jpeg', 1.0);
+        pdf.addImage(img, 'JPEG', 0, 0, 210, 297);
+        const title = document.getElementById('subjectTitle').value || 'index';
+        pdf.save(`${title.replace(/\s+/g, '-').toLowerCase()}-index.pdf`);
+        showToast('PDF downloaded!');
+      } catch (e) { console.error(e); }
+      out.style.display = 'none';
+    }
+
+    async function downloadAsJPG() {
+      const out = document.getElementById('outputSection');
+      out.style.display = 'block';
+      try {
+        const canvas = await html2canvas(out, { scale: 2, useCORS: true, backgroundColor: '#fff' });
+        const link = document.createElement('a');
+        const title = document.getElementById('subjectTitle').value || 'index';
+        link.download = `${title.replace(/\s+/g, '-').toLowerCase()}-index.jpg`;
+        link.href = canvas.toDataURL('image/jpeg', 1.0);
+        link.click();
+        showToast('JPG downloaded!');
+      } catch (e) { console.error(e); }
+      out.style.display = 'none';
+    }
+
+    function doPrint() { window.print(); }
+
+    function copyContent() {
+      const text = questions.map((q, i) => `${i + 1}. ${q.text}${q.page ? ' (Page ' + q.page + ')' : ''}`).join('\n');
+      navigator.clipboard.writeText(text)
+        .then(() => showToast('Copied to clipboard!'))
+        .catch(() => {});
+    }
+
+    // ── Toast ──────────────────────────────────
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'toast success';
+      t.innerHTML = `<i class="fas fa-check-circle"></i> ${msg}`;
+      document.body.appendChild(t);
+      setTimeout(() => { t.classList.add('show'); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 2500); }, 10);
+    }
+
+    // ── Keyboard Shortcuts ─────────────────────
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideDeleteModal();
+      if ((e.ctrlKey || e.metaKey) && e.key === 'p') { e.preventDefault(); doPrint(); }
+    });
+
+    // Enter to add question
+    document.getElementById('newQuestion').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); addQuestion(); }
+    });
+    document.getElementById('pageNumber').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); addQuestion(); }
+    });
+
+    // Close modal on background click
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+      if (e.target === this) hideDeleteModal();
+    });
+  </script>
+</body>
+</html>
