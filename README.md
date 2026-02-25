@@ -4,89 +4,93 @@
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yourusername/assignment-cover-generator/graphs/commit-activity)
-[![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://yourusername.github.io/assignment-cover-generator/)
+[![Maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/ajnish-kumar-sahu/assignment-cover-generator/graphs/commit-activity)
 
-> A modern, responsive web application for generating professional academic assignment covers. Built with vanilla JavaScript, this tool helps students create consistent and well-formatted assignment covers quickly and efficiently.
+> A modern, premium web application for generating professional academic assignment cover pages. Features glassmorphism UI, interactive particle backgrounds, 7 templates, 3-mode auto theme, and one-click PDF/JPG export — all built with vanilla HTML, CSS & JavaScript.
 
 ## 🌟 Overview
 
-The Assignment Cover Generator is a powerful tool designed to streamline the process of creating professional academic assignment covers. Whether you're a student or educator, this application provides multiple templates and customization options to meet your needs.
+The Assignment Cover Generator helps students create polished, professional assignment covers in minutes. Fill in your details, pick a template and color, then export as PDF or JPG — no installs, no accounts, completely free.
 
 ![Assignment Cover Generator Demo](./thumbs/modern.svg)
 
-## 📑 Available Templates
+## 📑 Templates (7)
 
-### 1. Classic Template
+| # | Template | Description |
+|---|----------|-------------|
+| 📜 | **Classic** | Traditional academic layout with formal header/footer sections |
+| 🔷 | **Modern** | Contemporary design with dynamic color accents and clean lines |
+| ◻️ | **Minimal** | Simplified, distraction-free — perfect for technical reports |
+| 🏛️ | **Professional** | Business-style formatting for corporate/professional submissions |
+| ✨ | **Elegant** | Refined design with decorative elements and premium typography |
+| 🎨 | **Creative** | Bold, artistic layout with unique visual hierarchy |
+| 🎓 | **Academic** | Institution-focused design with structured academic formatting |
 
-![Classic Template](./thumbs/classic.svg)
+Switch templates by clicking cards, using **← →** arrow keys, or swiping on mobile.
 
-- Traditional academic layout
-- Perfect for university assignments
-- Formal header and footer sections
-- Clear hierarchy with section separators
-- Professional font combinations
+## 🎨 Theme Colors (7)
 
-### 2. Modern Template
-
-![Modern Template](./thumbs/modern.svg)
-
-- Contemporary design elements
-- Clean and minimalist approach
-- Dynamic color accents
-- Balanced white space
-- Enhanced readability
-
-### 3. Minimal Template
-
-![Minimal Template](./thumbs/minimal.svg)
-
-- Simplified layout structure
-- Essential information only
-- Distraction-free design
-- Perfect for technical reports
-- Optimized for quick scanning
-
-### 4. Professional Template
-
-![Professional Template](./thumbs/professional.svg)
-
-- Business-style formatting
-- Corporate-ready design
-- Structured information blocks
-- Ideal for professional submissions
-- Enhanced branding options
+<table>
+  <tr>
+    <td>🔵 Default Blue</td>
+    <td>🟢 Forest Green</td>
+    <td>🔴 Ruby Red</td>
+    <td>🟣 Royal Purple</td>
+  </tr>
+  <tr>
+    <td>⚫ Classic Black</td>
+    <td>🌊 Ocean Blue</td>
+    <td>🟠 Deep Orange</td>
+    <td></td>
+  </tr>
+</table>
 
 ## ✨ Key Features
 
-- **🎨 Multiple Templates**
-  - Classic Layout: Traditional academic style
-  - Modern Design: Contemporary and clean
-  - Minimal Theme: Simple and elegant
-  - Professional Format: Business-like appearance
+### � 3-Mode Auto Theme
+- **Auto** — Detects system preference (`prefers-color-scheme`), falls back to time-based (dark after 7 PM, light at 6 AM)
+- **Light** — Forces light mode
+- **Dark** — Forces dark mode
+- Cycles via floating toggle button or `Ctrl+T`
 
-- **🛠️ Advanced Customization**
-  - Dynamic color themes with real-time preview
-  - Font customization (family, size, weight)
-  - Multiple paper sizes (A4, Letter, Legal)
-  - Custom headers and footers
-  - Watermark options
-  - Institution logo upload
+### 🌌 Interactive Particle Background
+- 60 multi-color particles with glow effects and pulse animation
+- Mouse repulsion — particles scatter when you hover near them
+- Connection lines drawn between nearby particles
+- Color palette adapts to light/dark theme
 
-- **💾 Export & Share**
-  - High-quality PDF export (up to 300 DPI)
-  - Multiple image formats (JPG, PNG, SVG)
-  - Direct printing support
-  - Email integration
-  - Cloud storage support (Google Drive, Dropbox)
+### 💾 Smart Data Management
+- **Auto-save** every 30 seconds
+- Manual save/load with `Ctrl+S` / `Ctrl+L`
+- Data stored securely in browser localStorage
+- Form validation with real-time feedback
 
-- **📱 Smart Features**
-  - Automatic data persistence
-  - Form autofill and validation
-  - Real-time preview
-  - Smart date formatting
-  - Template favorites
-  - Keyboard shortcuts
+### � Export Options
+- **PDF** — High-quality A4 export using jsPDF + html2canvas
+- **JPG** — Universal image format for sharing
+- **Print** — Direct printing with optimized print styles
+
+### 💎 Premium UI/UX
+- Glassmorphism design with backdrop blur
+- Animated gradient backgrounds
+- Staggered entrance animations for form fields
+- Glowing pulse effect on active template card
+- Button ripple effects
+- Responsive design — works on desktop, tablet & mobile
+
+## ⌨️ Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl + Enter` | Generate cover page |
+| `Ctrl + S` | Save form data |
+| `Ctrl + L` | Load saved data |
+| `Ctrl + T` | Toggle theme (Auto → Light → Dark) |
+| `Ctrl + H` | Show help guide |
+| `Ctrl + R` | Reset form |
+| `Ctrl + P` | Print cover |
+| `← / →` | Switch templates |
+| `Esc` | Close modals |
 
 ## 🚀 Getting Started
 
@@ -94,184 +98,105 @@ The Assignment Cover Generator is a powerful tool designed to streamline the pro
 
 - Modern web browser (Chrome 88+, Firefox 85+, Safari 14+, Edge 88+)
 - JavaScript enabled
-- Minimum screen resolution: 1024x768
-- PDF viewer for generated files
-- Stable internet connection for cloud features
 
 ### Installation
 
-1. **Clone the Repository**
+1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/assignment-cover-generator.git
+   git clone https://github.com/ajnish-kumar-sahu/assignment-cover-generator.git
    cd assignment-cover-generator
    ```
 
-2. **Setup Dependencies**
-   ```html
-   <!-- Required Libraries -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+2. **Open in browser**
    ```
-
-3. **Configuration**
-   - Copy `config.example.js` to `config.js`
-   - Update settings in `config.js`
-   - Set up environment variables if needed
+   Open main.html in your browser — no build step required!
+   ```
 
 ### Usage
 
-1. Open `index.html` in your browser
-2. Fill in the required assignment details
-3. Choose a template from available options
-4. Customize the design elements
-5. Preview your changes in real-time
-6. Generate and download in preferred format
+1. Open `main.html` → click **Assignment Cover Generator**
+2. Fill in your assignment details (name, roll no., semester, subject, etc.)
+3. Choose a template and theme color
+4. Preview updates in real-time on the right panel
+5. Click **Generate** or press `Ctrl+Enter`
+6. Export as **PDF**, **JPG**, or **Print** directly
 
-## 💻 Development
+## 💻 Tech Stack
 
-### Tech Stack
+| Technology | Purpose |
+|-----------|---------|
+| HTML5 | Page structure & semantic markup |
+| CSS3 | Glassmorphism, animations, responsive layout |
+| Vanilla JavaScript (ES6+) | App logic, template rendering, theme system |
+| [html2canvas](https://html2canvas.hertzen.com/) | HTML to canvas conversion for export |
+| [jsPDF](https://github.com/parallax/jsPDF) | PDF generation |
+| [Font Awesome 6.5](https://fontawesome.com/) | Icons |
+| [Google Fonts (Inter)](https://fonts.google.com/specimen/Inter) | Typography |
+| localStorage | Data persistence |
 
-- HTML5 for structure
-- CSS3 for styling (with CSS Grid and Flexbox)
-- Vanilla JavaScript (ES6+) for functionality
-- Local Storage for data persistence
-- Service Workers for offline support
+## 📁 Project Structure
 
-### Project Structure
 ```
 assignment/
-├── assets/              # Static assets
-│   ├── images/         # Image resources
-│   ├── fonts/          # Custom fonts
-│   └── icons/          # UI icons
-├── scripts/            # JavaScript modules
-│   ├── core/          # Core functionality
-│   ├── templates/     # Template definitions
-│   └── utils/         # Utility functions
-├── styles/            # CSS files
-│   ├── components/    # Component styles
-│   └── themes/        # Theme variations
-├── index.html         # Main application
-├── manifest.json      # PWA manifest
-└── README.md         # Documentation
+├── main.html              # Landing page — tool selector
+├── index.html             # Assignment Cover Generator (main app)
+├── Design-IndexPage.html  # Index Page Designer tool
+├── website.html           # How to Use — help & guide page
+├── app.js                 # Core app logic (particles, themes, templates, export)
+├── styles.css             # Premium stylesheet (glassmorphism, animations)
+├── thumbs/                # Template preview thumbnails
+├── README.md              # This file
+├── LICENSE                # MIT License
+└── SECURITY.md            # Security policy
 ```
-
-### Development Workflow
-
-1. Create feature branch
-2. Implement changes
-3. Run tests
-4. Submit pull request
-5. Code review
-6. Merge to main
-
-## 🔍 Testing
-
-```bash
-# Run unit tests
-npm test
-
-# Run e2e tests
-npm run test:e2e
-
-# Check code coverage
-npm run coverage
-```
-
-## 📈 Performance
-
-- Lighthouse Score: 98/100
-- First Contentful Paint: < 1s
-- Time to Interactive: < 2s
-- Bundle Size: < 100KB gzipped
-
-## 🔒 Security
-
-- HTTPS enforced
-- Content Security Policy implemented
-- Regular dependency updates
-- XSS protection
-- CSRF protection
-- Data encryption at rest
 
 ## 🌐 Browser Support
 
-| Browser | Supported Versions |
-|---------|-------------------|
-| Chrome  | 88+              |
-| Firefox | 85+              |
-| Safari  | 14+              |
-| Edge    | 88+              |
+| Browser | Supported |
+|---------|------------------|
+| Chrome  | 88+ |
+| Firefox | 85+ |
+| Safari  | 14+ |
+| Edge    | 88+ |
+| Mobile Chrome | Android 8+ |
+| Mobile Safari | iOS 13+    |
 
-## 📚 Resources
-
-- [User Guide](docs/USER_GUIDE.md)
-- [API Documentation](docs/API.md)
-- [Contributing Guidelines](CONTRIBUTING.md)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [Change Log](CHANGELOG.md)
-
-## 🔮 Future Roadmap
-
-- [ ] Mobile app version
-- [ ] Template marketplace
-- [ ] AI-powered template suggestions
-- [ ] Collaborative editing
-- [ ] Integration with LMS platforms
-- [ ] Automated citation formatting
-
-## 🤝 Contributing
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 👨‍💻 Developer Profile
+## 👨‍💻 Developer
 
 <div align="center">
-  <img src="https://github.com/ajnish-kumar-sahu.png" alt="Ajnish Kumar" width="200" style="border-radius: 50%; margin-bottom: 20px;"/>
-  
+  <img src="https://github.com/ajnish-kumar-sahu.png" alt="Ajnish Kumar" width="150" style="border-radius: 50%;"/>
+
   ### Ajnish Kumar
-  
+
   [![GitHub](https://img.shields.io/badge/GitHub-ajnish--kumar--sahu-181717?style=for-the-badge&logo=github)](https://github.com/ajnish-kumar-sahu)
   [![LinkedIn](https://img.shields.io/badge/LinkedIn-ajnishkumar16-0A66C2?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/ajnishkumar16)
   [![Portfolio](https://img.shields.io/badge/Portfolio-Visit%20Site-00A98F?style=for-the-badge&logo=about.me)](https://ajnish-kumar-sahu.github.io)
-  
-  <table>
-    <tr>
-      <td><b>🎓 Education</b></td>
-      <td>BCA 3rd Semester</td>
-    </tr>
-    <tr>
-      <td><b>🏛 University</b></td>
-      <td>Vinoba Bhave University, Hazaribag, Jharkhand</td>
-    </tr>
-    <tr>
-      <td><b>💻 Expertise</b></td>
-      <td>Web Development, UI/UX Design, JavaScript</td>
-    </tr>
-    <tr>
-      <td><b>🌟 Skills</b></td>
-      <td>
-        <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white" alt="HTML5"/>
-        <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white" alt="CSS3"/>
-        <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black" alt="JavaScript"/>
-      </td>
-    </tr>
-  </table>
+
+  | | |
+  |---|---|
+  | 🎓 **Education** | BCA 5th Semester |
+  | 🏛 **University** | Vinoba Bhave University, Hazaribag, Jharkhand |
+  | 💻 **Expertise** | Web Development, UI/UX Design, JavaScript |
 </div>
+
+## 🤝 Contributing
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 🙏 Acknowledgments
+
+- [html2canvas](https://html2canvas.hertzen.com/) — HTML to canvas conversion
+- [jsPDF](https://github.com/parallax/jsPDF) — PDF generation
+- [Font Awesome](https://fontawesome.com/) — Icons
+- [Google Fonts](https://fonts.google.com/) — Inter typeface
 
 ## 📄 License
 
 [MIT](LICENSE) © 2025 Ajnish Kumar
-
-## 🙏 Acknowledgments
-
-- [html2canvas](https://html2canvas.hertzen.com/) for HTML to canvas conversion
-- [jsPDF](https://github.com/parallax/jsPDF) for PDF generation
-- [Font Awesome](https://fontawesome.com/) for icons
 
 ## 📊 Stats
 
@@ -282,10 +207,10 @@ npm run coverage
 
 ## 📅 Last Updated
 
-April 14, 2025
+February 25, 2025
 
 ---
 <div align="center">
-  <p>Made with ❤ by Ajnish Kumar</p>
+  <p>Made with ❤️ by Ajnish Kumar</p>
   <p><a href="https://ajnish-kumar-sahu.github.io/assignment-cover-generator/">View Live Demo</a></p>
 </div>

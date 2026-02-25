@@ -4,13 +4,33 @@
 
 const { jsPDF } = window.jspdf;
 
-// ── Particles Background ──────────────────────────────
+// ── Enhanced Particles Background ─────────────────────
 (function initParticles() {
   const canvas = document.getElementById('particlesCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   let particles = [];
   let w, h;
+  let mouseX = -999, mouseY = -999;
+  const PARTICLE_COUNT = 60;
+  const CONNECTION_DIST = 120;
+  const MOUSE_RADIUS = 150;
+
+  // Multi-color palette
+  const lightColors = [
+    [99, 102, 241],   // Indigo
+    [20, 184, 166],   // Teal
+    [236, 72, 153],   // Pink
+    [139, 92, 246],   // Violet
+    [59, 130, 246],   // Blue
+  ];
+  const darkColors = [
+    [129, 140, 248],  // Indigo light
+    [94, 234, 212],   // Teal light
+    [249, 168, 212],  // Pink light
+    [167, 139, 250],  // Violet light
+    [96, 165, 250],   // Blue light
+  ];
 
   function resize() {
     w = canvas.width = window.innerWidth;
@@ -19,31 +39,85 @@ const { jsPDF } = window.jspdf;
   resize();
   window.addEventListener('resize', resize);
 
-  for (let i = 0; i < 40; i++) {
+  // Track mouse
+  window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+  window.addEventListener('mouseleave', () => { mouseX = -999; mouseY = -999; });
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
     particles.push({
       x: Math.random() * w,
       y: Math.random() * h,
-      r: Math.random() * 2.5 + 0.5,
-      dx: (Math.random() - 0.5) * 0.4,
-      dy: (Math.random() - 0.5) * 0.4,
-      opacity: Math.random() * 0.3 + 0.1
+      r: Math.random() * 2.5 + 0.8,
+      dx: (Math.random() - 0.5) * 0.5,
+      dy: (Math.random() - 0.5) * 0.5,
+      opacity: Math.random() * 0.35 + 0.1,
+      colorIdx: Math.floor(Math.random() * lightColors.length),
+      pulsePhase: Math.random() * Math.PI * 2,
     });
   }
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
     const isDark = document.body.classList.contains('dark-theme');
+    const palette = isDark ? darkColors : lightColors;
+    const now = performance.now() / 1000;
+
+    // Draw connection lines first (behind particles)
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < CONNECTION_DIST) {
+          const alpha = (1 - dist / CONNECTION_DIST) * 0.12;
+          const c = palette[particles[i].colorIdx];
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw particles
     particles.forEach(p => {
+      // Mouse repulsion
+      const dxm = p.x - mouseX;
+      const dym = p.y - mouseY;
+      const distMouse = Math.sqrt(dxm * dxm + dym * dym);
+      if (distMouse < MOUSE_RADIUS && distMouse > 0) {
+        const force = (MOUSE_RADIUS - distMouse) / MOUSE_RADIUS * 0.8;
+        p.x += (dxm / distMouse) * force;
+        p.y += (dym / distMouse) * force;
+      }
+
+      // Subtle pulse
+      const pulse = 1 + Math.sin(now * 1.5 + p.pulsePhase) * 0.15;
+      const c = palette[p.colorIdx];
+      const currentOpacity = p.opacity * pulse;
+
+      // Glow effect
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = isDark
-        ? `rgba(129, 140, 248, ${p.opacity})`
-        : `rgba(99, 102, 241, ${p.opacity})`;
+      ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${currentOpacity * 0.15})`;
       ctx.fill();
+
+      // Core particle
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * pulse, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${currentOpacity})`;
+      ctx.fill();
+
+      // Movement
       p.x += p.dx;
       p.y += p.dy;
       if (p.x < 0 || p.x > w) p.dx *= -1;
       if (p.y < 0 || p.y > h) p.dy *= -1;
+      // Soft boundary
+      p.x = Math.max(0, Math.min(w, p.x));
+      p.y = Math.max(0, Math.min(h, p.y));
     });
     requestAnimationFrame(draw);
   }
@@ -101,12 +175,9 @@ document.querySelectorAll('#coverForm input, #coverForm select').forEach(el => {
 
 // ── Initialization ─────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // Theme restore
-  if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark-theme');
-    const icon = document.getElementById('themeIcon');
-    if (icon) icon.classList.replace('fa-moon', 'fa-sun');
-  }
+  // Theme restore (3-mode system)
+  const savedMode = localStorage.getItem('themeMode') || 'auto';
+  applyThemeMode(savedMode);
   // Load saved data
   loadFormData();
   // Welcome modal
@@ -635,18 +706,62 @@ function showNotification(message, type = 'success') {
   }, 10);
 }
 
-// ── Theme Toggle ───────────────────────────────────────
-function toggleTheme() {
-  document.body.classList.toggle('dark-theme');
-  const icon = document.getElementById('themeIcon');
-  if (document.body.classList.contains('dark-theme')) {
-    icon.classList.replace('fa-moon', 'fa-sun');
-    localStorage.setItem('theme', 'dark');
-  } else {
-    icon.classList.replace('fa-sun', 'fa-moon');
-    localStorage.setItem('theme', 'light');
-  }
+// ── 3-Mode Theme System: Auto / Light / Dark ──────────
+const THEME_MODES = ['auto', 'light', 'dark'];
+const THEME_ICONS = { auto: 'fa-circle-half-stroke', light: 'fa-sun', dark: 'fa-moon' };
+const THEME_LABELS = { auto: 'Auto', light: 'Light', dark: 'Dark' };
+
+function getSystemPrefersDark() {
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
+
+function getTimePrefersDark() {
+  const hour = new Date().getHours();
+  return hour >= 19 || hour < 6; // Dark from 7 PM to 6 AM
+}
+
+function shouldBeDark(mode) {
+  if (mode === 'dark') return true;
+  if (mode === 'light') return false;
+  // Auto: System preference first, time fallback
+  return getSystemPrefersDark() || getTimePrefersDark();
+}
+
+function applyThemeMode(mode) {
+  const dark = shouldBeDark(mode);
+  document.body.classList.toggle('dark-theme', dark);
+
+  const icon = document.getElementById('themeIcon');
+  const label = document.getElementById('themeLabel');
+  if (icon) {
+    icon.className = ''; // Clear all classes
+    icon.classList.add('fas', THEME_ICONS[mode]);
+  }
+  if (label) label.textContent = THEME_LABELS[mode];
+}
+
+function toggleTheme() {
+  const current = localStorage.getItem('themeMode') || 'auto';
+  const idx = THEME_MODES.indexOf(current);
+  const next = THEME_MODES[(idx + 1) % THEME_MODES.length];
+  localStorage.setItem('themeMode', next);
+  applyThemeMode(next);
+  showNotification(`Theme: ${THEME_LABELS[next]}`, 'success');
+}
+
+// Listen for system preference changes (for Auto mode)
+if (window.matchMedia) {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    const mode = localStorage.getItem('themeMode') || 'auto';
+    if (mode === 'auto') applyThemeMode('auto');
+  });
+}
+
+// Re-check time-based theme every 5 minutes (for Auto mode)
+setInterval(() => {
+  const mode = localStorage.getItem('themeMode') || 'auto';
+  if (mode === 'auto') applyThemeMode('auto');
+}, 300000);
 
 // ── Font Size ──────────────────────────────────────────
 function adjustFontSize(action) {

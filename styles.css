@@ -289,7 +289,17 @@ body::before {
 .form-group {
   position: relative;
   margin-bottom: 1.5rem;
+  animation: fadeInUp 0.5s var(--ease-out) both;
 }
+
+.form-group:nth-child(1) { animation-delay: 0.05s; }
+.form-group:nth-child(2) { animation-delay: 0.1s; }
+.form-group:nth-child(3) { animation-delay: 0.15s; }
+.form-group:nth-child(4) { animation-delay: 0.2s; }
+.form-group:nth-child(5) { animation-delay: 0.25s; }
+.form-group:nth-child(6) { animation-delay: 0.3s; }
+.form-group:nth-child(7) { animation-delay: 0.35s; }
+.form-group:nth-child(8) { animation-delay: 0.4s; }
 
 .form-group label {
   position: absolute;
@@ -421,6 +431,12 @@ select.form-control {
   border-color: var(--primary);
   background: rgba(99, 102, 241, 0.06);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12), var(--shadow-md);
+  animation: cardGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes cardGlow {
+  from { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12), var(--shadow-md); }
+  to { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25), 0 0 20px rgba(99, 102, 241, 0.1); }
 }
 
 .template-card.active::after {
@@ -767,6 +783,7 @@ select.form-control {
   box-shadow: var(--shadow-md);
   transition: all var(--duration-fast) var(--ease-spring);
   font-size: 1.1rem;
+  position: relative;
 }
 
 .tool-button:hover {
@@ -774,6 +791,24 @@ select.form-control {
   box-shadow: var(--shadow-lg), var(--shadow-glow);
   background: var(--primary);
   color: white;
+}
+
+/* Theme mode label */
+.theme-label {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
 }
 
 .font-size-controls {
@@ -863,13 +898,13 @@ select.form-control {
 .notification {
   position: fixed;
   bottom: 24px;
-  right: 24px;
+  left: 24px;
   padding: 0.85rem 1.4rem;
   border-radius: var(--radius-md);
   color: white;
   font-weight: 600;
   font-size: 0.9rem;
-  transform: translateY(100px);
+  transform: translateX(-120%);
   opacity: 0;
   transition: all 0.4s var(--ease-spring);
   z-index: 10000;
@@ -878,12 +913,13 @@ select.form-control {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  max-width: 320px;
 }
 
 .notification.success { background: linear-gradient(135deg, #22c55e, #16a34a); }
 .notification.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
 .notification.show {
-  transform: translateY(0);
+  transform: translateX(0);
   opacity: 1;
 }
 
@@ -891,19 +927,20 @@ select.form-control {
    Welcome Modal
    ═══════════════════════════════════════════════════════ */
 .welcome-modal {
-  display: none;
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(6px);
   z-index: 3000;
   opacity: 0;
-  transition: opacity 0.4s var(--ease-out);
+  visibility: hidden;
+  display: flex;
+  transition: opacity 0.4s var(--ease-out), visibility 0.4s var(--ease-out);
 }
 
 .welcome-modal.active {
-  display: flex;
   opacity: 1;
+  visibility: visible;
 }
 
 .welcome-content {
