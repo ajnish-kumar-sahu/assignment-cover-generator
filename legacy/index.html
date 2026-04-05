@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assignment Cover Generator — Professional Academic Covers</title>
+    <meta name="description" content="Create stunning, professional assignment cover pages in minutes. Multiple templates, PDF/JPG export, dark mode." />
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <!-- Particles Background -->
+    <canvas class="particles-canvas" id="particlesCanvas"></canvas>
+
+    <!-- Welcome Modal -->
+    <div class="welcome-modal" id="welcomeModal">
+      <div class="welcome-content">
+        <div class="welcome-header">
+          <h2>👋 Welcome to Assignment Cover Generator!</h2>
+        </div>
+        <div class="welcome-body">
+          <h3>Quick Guide:</h3>
+          <ul>
+            <li>Fill in your details in the form</li>
+            <li>Choose from 7 professional templates</li>
+            <li>Preview your cover page in real-time</li>
+            <li>Download as PDF or JPG, or print directly</li>
+            <li>Save your details for future use</li>
+          </ul>
+          <div class="welcome-checkbox">
+            <input type="checkbox" id="dontShowAgain" />
+            <label for="dontShowAgain">Don't show this again</label>
+          </div>
+        </div>
+        <div class="welcome-actions">
+          <button class="welcome-btn skip" onclick="skipWelcome(true)">Skip</button>
+          <button class="welcome-btn continue" onclick="continueToGuide()">How to Use</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Help Button -->
+    <button class="help-button" onclick="showHelp()" title="How to Use">
+      <i class="fas fa-question"></i>
+    </button>
+
+    <!-- Help Modal -->
+    <div class="help-modal" id="helpModal">
+      <button class="close-modal" onclick="hideHelp()"><i class="fas fa-times"></i></button>
+      <iframe src="website.html" class="help-content"></iframe>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <h1>Assignment Cover Generator</h1>
+        <p>Create professional academic covers in minutes</p>
+        <a href="main.html" class="portfolio-link">
+          <i class="fas fa-arrow-left"></i> Back to Tools
+        </a>
+        <a href="https://www.ajnish.in/" class="portfolio-link" target="_blank">
+          <i class="fas fa-external-link-alt"></i> Portfolio
+        </a>
+      </header>
+
+      <!-- Main Content -->
+      <main id="main-content">
+        <div class="form-container">
+          <div class="loading-overlay">
+            <div class="spinner"></div>
+            <div class="loading-text">Processing...</div>
+          </div>
+
+          <!-- Input Section -->
+          <section class="input-section">
+            <div class="section-title"><i class="fas fa-edit"></i> Fill Your Details</div>
+            <form id="coverForm">
+              <div class="form-group">
+                <input type="text" id="studentName" class="form-control" placeholder=" " required />
+                <label for="studentName">👤 Student Name</label>
+              </div>
+              <div class="form-group">
+                <input type="text" id="rollNumber" class="form-control" placeholder=" " required />
+                <label for="rollNumber">🎓 University Roll No.</label>
+              </div>
+              <div class="form-group">
+                <input type="text" id="classRoll" class="form-control" placeholder=" " required />
+                <label for="classRoll">🏫 Class Roll No.</label>
+              </div>
+              <div class="form-group">
+                <select id="semester" class="form-control" required>
+                  <option value="">Select Semester</option>
+                  <option value="1st">1st Semester</option>
+                  <option value="2nd">2nd Semester</option>
+                  <option value="3rd">3rd Semester</option>
+                  <option value="4th">4th Semester</option>
+                  <option value="5th">5th Semester</option>
+                  <option value="6th">6th Semester</option>
+                </select>
+                <label for="semester">📚 Semester</label>
+              </div>
+              <div class="form-group">
+                <input type="text" id="subject" class="form-control" placeholder=" " required />
+                <label for="subject">📖 Subject</label>
+              </div>
+              <div class="form-group">
+                <input type="text" id="courseCode" class="form-control" placeholder=" " required />
+                <label for="courseCode">🔖 Course Code</label>
+              </div>
+              <div class="form-group">
+                <input type="date" id="submissionDate" class="form-control has-value" required />
+                <label for="submissionDate">📅 Submission Date</label>
+              </div>
+              <div class="form-group">
+                <select id="assignmentType" class="form-control" required>
+                  <optgroup label="Assignments">
+                    <option value="Assignment">Regular Assignment</option>
+                    <option value="Home Assignment">Home Assignment</option>
+                    <option value="Group Assignment">Group Assignment</option>
+                  </optgroup>
+                  <optgroup label="Projects">
+                    <option value="Project">Project Work</option>
+                    <option value="Mini Project">Mini Project</option>
+                    <option value="Major Project">Major Project</option>
+                  </optgroup>
+                  <optgroup label="Lab Work">
+                    <option value="Lab Report">Lab Report</option>
+                    <option value="Lab Manual">Lab Manual</option>
+                    <option value="Practical File">Practical File</option>
+                  </optgroup>
+                  <optgroup label="Research">
+                    <option value="Case Study">Case Study</option>
+                    <option value="Term Paper">Term Paper</option>
+                    <option value="Research Paper">Research Paper</option>
+                  </optgroup>
+                  <optgroup label="Others">
+                    <option value="Presentation">Presentation</option>
+                    <option value="Documentation">Documentation</option>
+                    <option value="Report">Report</option>
+                  </optgroup>
+                </select>
+                <label for="assignmentType">📋 Assignment Type</label>
+              </div>
+
+              <!-- Template Gallery -->
+              <div class="template-gallery">
+                <div class="template-gallery-label">🖼 Choose Template</div>
+                <div class="template-cards" id="templateCards">
+                  <div class="template-card active" data-template="classic"><div class="template-card-icon">📜</div><div class="template-card-name">Classic</div></div>
+                  <div class="template-card" data-template="modern"><div class="template-card-icon">🔷</div><div class="template-card-name">Modern</div></div>
+                  <div class="template-card" data-template="minimal"><div class="template-card-icon">◻️</div><div class="template-card-name">Minimal</div></div>
+                  <div class="template-card" data-template="professional"><div class="template-card-icon">🏛️</div><div class="template-card-name">Professional</div></div>
+                  <div class="template-card" data-template="elegant"><div class="template-card-icon">✨</div><div class="template-card-name">Elegant</div></div>
+                  <div class="template-card" data-template="creative"><div class="template-card-icon">🎨</div><div class="template-card-name">Creative</div></div>
+                  <div class="template-card" data-template="academic"><div class="template-card-icon">🎓</div><div class="template-card-name">Academic</div></div>
+                </div>
+              </div>
+              <!-- Hidden select for form data -->
+              <select id="template" class="form-control" style="display:none;">
+                <option value="classic">Classic</option>
+                <option value="modern">Modern</option>
+                <option value="minimal">Minimal</option>
+                <option value="professional">Professional</option>
+                <option value="elegant">Elegant</option>
+                <option value="creative">Creative</option>
+                <option value="academic">Academic</option>
+              </select>
+
+              <!-- Color Swatches -->
+              <div class="template-gallery">
+                <div class="color-swatches-label">🎨 Theme Color</div>
+                <div class="color-swatches" id="colorSwatches">
+                  <div class="color-swatch active" data-color="#1a237e" style="background:#1a237e;" title="Default Blue"></div>
+                  <div class="color-swatch" data-color="#1b5e20" style="background:#1b5e20;" title="Forest Green"></div>
+                  <div class="color-swatch" data-color="#b71c1c" style="background:#b71c1c;" title="Ruby Red"></div>
+                  <div class="color-swatch" data-color="#4a148c" style="background:#4a148c;" title="Royal Purple"></div>
+                  <div class="color-swatch" data-color="#212121" style="background:#212121;" title="Classic Black"></div>
+                  <div class="color-swatch" data-color="#0d47a1" style="background:#0d47a1;" title="Ocean Blue"></div>
+                  <div class="color-swatch" data-color="#bf360c" style="background:#bf360c;" title="Deep Orange"></div>
+                </div>
+              </div>
+              <select id="themeColor" class="form-control" style="display:none;">
+                <option value="#1a237e">Default Blue</option>
+              </select>
+
+              <div class="action-buttons">
+                <button type="submit" class="btn btn-generate"><i class="fas fa-magic"></i> Generate</button>
+                <button type="button" class="btn btn-save" onclick="saveFormData()"><i class="fas fa-save"></i> Save</button>
+                <button type="button" class="btn btn-load" onclick="loadFormData()"><i class="fas fa-folder-open"></i> Load</button>
+              </div>
+            </form>
+          </section>
+
+          <!-- Preview Section -->
+          <section class="preview-section">
+            <h2><i class="fas fa-eye"></i> Live Preview</h2>
+            <iframe id="previewFrame" class="preview-frame"></iframe>
+            <div class="action-buttons">
+              <button type="button" class="btn btn-print" onclick="printCover()"><i class="fas fa-print"></i> Print</button>
+              <button type="button" class="btn btn-pdf" onclick="downloadPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+              <button type="button" class="btn btn-jpg" onclick="downloadJPG()"><i class="fas fa-image"></i> JPG</button>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="developer-footer">
+        <div class="developer-details">
+          <h3>Developed with ❤ by</h3>
+          <div class="contact-info">
+            <div class="contact-item"><i class="fas fa-user-graduate"></i><span>Ajnish Kumar</span></div>
+            <div class="contact-item"><i class="fas fa-university"></i><span>BCA 5th Sem — VBU</span></div>
+            <div class="contact-item"><i class="fas fa-envelope"></i><a href="mailto:ajnishk261@gmail.com">Email</a></div>
+            <div class="contact-item"><i class="fas fa-phone"></i><span>+91 9608415521</span></div>
+          </div>
+          <p class="copyright">© 2026 Assignment Cover Generator. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Floating Tools -->
+    <div class="floating-tools">
+      <div class="tool-button" onclick="toggleTheme()" id="themeToggleBtn" title="Toggle Theme"><i class="fas fa-circle-half-stroke" id="themeIcon"></i><span class="theme-label" id="themeLabel">Auto</span></div>
+      <div class="tool-button" onclick="resetForm()" title="Reset Form"><i class="fas fa-undo"></i></div>
+      <div class="tool-button" onclick="shareForm()" title="Share"><i class="fas fa-share-alt"></i></div>
+    </div>
+
+    <div class="font-size-controls">
+      <button class="tool-button" onclick="adjustFontSize('decrease')" title="Decrease Font Size"><i class="fas fa-minus"></i></button>
+      <button class="tool-button" onclick="adjustFontSize('increase')" title="Increase Font Size"><i class="fas fa-plus"></i></button>
+    </div>
+
+    <!-- Shortcuts Modal -->
+    <div class="shortcuts-modal" id="shortcutsModal">
+      <h3>⌨️ Keyboard Shortcuts</h3>
+      <div class="shortcut-list" id="shortcutList"></div>
+    </div>
+
+    <!-- Scripts loaded externally -->
+    <script src="app.js"></script>
+  </body>
+</html>

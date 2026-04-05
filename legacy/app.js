@@ -6,30 +6,31 @@ const { jsPDF } = window.jspdf;
 
 // ── Enhanced Particles Background ─────────────────────
 (function initParticles() {
-  const canvas = document.getElementById('particlesCanvas');
+  const canvas = document.getElementById("particlesCanvas");
   if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext("2d");
   let particles = [];
   let w, h;
-  let mouseX = -999, mouseY = -999;
+  let mouseX = -999,
+    mouseY = -999;
   const PARTICLE_COUNT = 60;
   const CONNECTION_DIST = 120;
   const MOUSE_RADIUS = 150;
 
   // Multi-color palette
   const lightColors = [
-    [99, 102, 241],   // Indigo
-    [20, 184, 166],   // Teal
-    [236, 72, 153],   // Pink
-    [139, 92, 246],   // Violet
-    [59, 130, 246],   // Blue
+    [99, 102, 241], // Indigo
+    [20, 184, 166], // Teal
+    [236, 72, 153], // Pink
+    [139, 92, 246], // Violet
+    [59, 130, 246], // Blue
   ];
   const darkColors = [
-    [129, 140, 248],  // Indigo light
-    [94, 234, 212],   // Teal light
-    [249, 168, 212],  // Pink light
-    [167, 139, 250],  // Violet light
-    [96, 165, 250],   // Blue light
+    [129, 140, 248], // Indigo light
+    [94, 234, 212], // Teal light
+    [249, 168, 212], // Pink light
+    [167, 139, 250], // Violet light
+    [96, 165, 250], // Blue light
   ];
 
   function resize() {
@@ -37,11 +38,17 @@ const { jsPDF } = window.jspdf;
     h = canvas.height = window.innerHeight;
   }
   resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener("resize", resize);
 
   // Track mouse
-  window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-  window.addEventListener('mouseleave', () => { mouseX = -999; mouseY = -999; });
+  window.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+  window.addEventListener("mouseleave", () => {
+    mouseX = -999;
+    mouseY = -999;
+  });
 
   for (let i = 0; i < PARTICLE_COUNT; i++) {
     particles.push({
@@ -58,7 +65,7 @@ const { jsPDF } = window.jspdf;
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
-    const isDark = document.body.classList.contains('dark-theme');
+    const isDark = document.body.classList.contains("dark-theme");
     const palette = isDark ? darkColors : lightColors;
     const now = performance.now() / 1000;
 
@@ -82,13 +89,13 @@ const { jsPDF } = window.jspdf;
     }
 
     // Draw particles
-    particles.forEach(p => {
+    particles.forEach((p) => {
       // Mouse repulsion
       const dxm = p.x - mouseX;
       const dym = p.y - mouseY;
       const distMouse = Math.sqrt(dxm * dxm + dym * dym);
       if (distMouse < MOUSE_RADIUS && distMouse > 0) {
-        const force = (MOUSE_RADIUS - distMouse) / MOUSE_RADIUS * 0.8;
+        const force = ((MOUSE_RADIUS - distMouse) / MOUSE_RADIUS) * 0.8;
         p.x += (dxm / distMouse) * force;
         p.y += (dym / distMouse) * force;
       }
@@ -125,37 +132,41 @@ const { jsPDF } = window.jspdf;
 })();
 
 // ── Template Card Selection ────────────────────────────
-document.querySelectorAll('.template-card').forEach(card => {
-  card.addEventListener('click', () => {
-    document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
-    card.classList.add('active');
-    document.getElementById('template').value = card.dataset.template;
+document.querySelectorAll(".template-card").forEach((card) => {
+  card.addEventListener("click", () => {
+    document
+      .querySelectorAll(".template-card")
+      .forEach((c) => c.classList.remove("active"));
+    card.classList.add("active");
+    document.getElementById("template").value = card.dataset.template;
     generateCoverPage();
   });
 });
 
 // ── Color Swatch Selection ─────────────────────────────
-document.querySelectorAll('.color-swatch').forEach(swatch => {
-  swatch.addEventListener('click', () => {
-    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-    swatch.classList.add('active');
-    document.getElementById('themeColor').value = swatch.dataset.color;
+document.querySelectorAll(".color-swatch").forEach((swatch) => {
+  swatch.addEventListener("click", () => {
+    document
+      .querySelectorAll(".color-swatch")
+      .forEach((s) => s.classList.remove("active"));
+    swatch.classList.add("active");
+    document.getElementById("themeColor").value = swatch.dataset.color;
     generateCoverPage();
   });
 });
 
 // ── Button Ripple Effect ───────────────────────────────
-document.querySelectorAll('.btn').forEach(button => {
-  button.addEventListener('click', function(e) {
+document.querySelectorAll(".btn").forEach((button) => {
+  button.addEventListener("click", function (e) {
     const rect = button.getBoundingClientRect();
-    const ripple = document.createElement('span');
+    const ripple = document.createElement("span");
     const diameter = Math.max(rect.width, rect.height);
     const radius = diameter / 2;
     ripple.style.width = ripple.style.height = `${diameter}px`;
     ripple.style.left = `${e.clientX - rect.left - radius}px`;
     ripple.style.top = `${e.clientY - rect.top - radius}px`;
-    ripple.className = 'ripple';
-    const old = button.querySelector('.ripple');
+    ripple.className = "ripple";
+    const old = button.querySelector(".ripple");
     if (old) old.remove();
     button.appendChild(ripple);
     setTimeout(() => ripple.remove(), 600);
@@ -163,20 +174,22 @@ document.querySelectorAll('.btn').forEach(button => {
 });
 
 // ── Form Submission ────────────────────────────────────
-document.getElementById('coverForm').addEventListener('submit', (e) => {
+document.getElementById("coverForm").addEventListener("submit", (e) => {
   e.preventDefault();
   if (validateForm()) generateCoverPage();
 });
 
 // Real-time preview
-document.querySelectorAll('#coverForm input, #coverForm select').forEach(el => {
-  el.addEventListener('input', generateCoverPage);
-});
+document
+  .querySelectorAll("#coverForm input, #coverForm select")
+  .forEach((el) => {
+    el.addEventListener("input", generateCoverPage);
+  });
 
 // ── Initialization ─────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // Theme restore (3-mode system)
-  const savedMode = localStorage.getItem('themeMode') || 'auto';
+  const savedMode = localStorage.getItem("themeMode") || "auto";
   applyThemeMode(savedMode);
   // Load saved data
   loadFormData();
@@ -191,30 +204,43 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── Generate Cover Page ────────────────────────────────
 function generateCoverPage() {
   const data = {
-    studentName: document.getElementById('studentName').value,
-    rollNumber: document.getElementById('rollNumber').value,
-    classRoll: document.getElementById('classRoll').value,
-    semester: document.getElementById('semester').value,
-    subject: document.getElementById('subject').value,
-    courseCode: document.getElementById('courseCode').value,
-    submissionDate: document.getElementById('submissionDate').value,
-    assignmentType: document.getElementById('assignmentType').value,
-    themeColor: document.getElementById('themeColor').value || '#1a237e',
-    template: document.getElementById('template').value
+    studentName: document.getElementById("studentName").value,
+    rollNumber: document.getElementById("rollNumber").value,
+    classRoll: document.getElementById("classRoll").value,
+    semester: document.getElementById("semester").value,
+    subject: document.getElementById("subject").value,
+    courseCode: document.getElementById("courseCode").value,
+    submissionDate: document.getElementById("submissionDate").value,
+    assignmentType: document.getElementById("assignmentType").value,
+    themeColor: document.getElementById("themeColor").value || "#1a237e",
+    template: document.getElementById("template").value,
   };
 
   let coverHTML;
   switch (data.template) {
-    case 'modern': coverHTML = generateModernTemplate(data); break;
-    case 'minimal': coverHTML = generateMinimalTemplate(data); break;
-    case 'professional': coverHTML = generateProfessionalTemplate(data); break;
-    case 'elegant': coverHTML = generateElegantTemplate(data); break;
-    case 'creative': coverHTML = generateCreativeTemplate(data); break;
-    case 'academic': coverHTML = generateAcademicTemplate(data); break;
-    default: coverHTML = generateClassicTemplate(data);
+    case "modern":
+      coverHTML = generateModernTemplate(data);
+      break;
+    case "minimal":
+      coverHTML = generateMinimalTemplate(data);
+      break;
+    case "professional":
+      coverHTML = generateProfessionalTemplate(data);
+      break;
+    case "elegant":
+      coverHTML = generateElegantTemplate(data);
+      break;
+    case "creative":
+      coverHTML = generateCreativeTemplate(data);
+      break;
+    case "academic":
+      coverHTML = generateAcademicTemplate(data);
+      break;
+    default:
+      coverHTML = generateClassicTemplate(data);
   }
 
-  const previewFrame = document.getElementById('previewFrame');
+  const previewFrame = document.getElementById("previewFrame");
   previewFrame.contentDocument.open();
   previewFrame.contentDocument.write(coverHTML);
   previewFrame.contentDocument.close();
@@ -222,9 +248,13 @@ function generateCoverPage() {
 
 // ── Format Date ────────────────────────────────────────
 function formatDate(dateString) {
-  if (!dateString) return '';
+  if (!dateString) return "";
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
 
 // ── Template: Classic ──────────────────────────────────
@@ -424,7 +454,7 @@ function generateElegantTemplate(data) {
     <div class="ornament">❧ ❦ ❧</div>
     <div class="header">
       <div class="uni-name">Vinoba Bhave University</div>
-      <div class="dept-name">Department of Computer Application</div>
+      <div class="dept-name">Univercity Department of Computer Application VBU,hazaribag</div>
       <img src="https://i1.wp.com/www.winmeen.com/wp-content/uploads/2017/04/VBU-New-Logo.png?ssl=1" class="logo" alt="Logo">
     </div>
     <div class="title-section">
@@ -551,140 +581,155 @@ function generateAcademicTemplate(data) {
 
 // ── Validation ─────────────────────────────────────────
 function validateForm() {
-  const form = document.getElementById('coverForm');
-  const inputs = form.querySelectorAll('input, select');
+  const form = document.getElementById("coverForm");
+  const inputs = form.querySelectorAll("input, select");
   let isValid = true;
-  inputs.forEach(input => {
-    const err = input.parentNode.querySelector('.error-message');
+  inputs.forEach((input) => {
+    const err = input.parentNode.querySelector(".error-message");
     if (err) err.remove();
-    if (input.hasAttribute('required') && !input.value.trim()) {
+    if (input.hasAttribute("required") && !input.value.trim()) {
       isValid = false;
-      input.classList.add('invalid');
-      const msg = document.createElement('div');
-      msg.className = 'error-message';
-      const label = input.parentNode.querySelector('label');
-      msg.textContent = `Please enter ${label ? label.textContent.trim() : 'this field'}`;
-      input.insertAdjacentElement('afterend', msg);
+      input.classList.add("invalid");
+      const msg = document.createElement("div");
+      msg.className = "error-message";
+      const label = input.parentNode.querySelector("label");
+      msg.textContent = `Please enter ${label ? label.textContent.trim() : "this field"}`;
+      input.insertAdjacentElement("afterend", msg);
     } else {
-      input.classList.remove('invalid');
+      input.classList.remove("invalid");
     }
   });
   return isValid;
 }
 
 // ── Button State ───────────────────────────────────────
-function setButtonState(button, state, message = '') {
-  button.disabled = state === 'loading';
-  button.classList.remove('loading', 'success', 'error');
-  if (state === 'loading') {
-    button.classList.add('loading');
+function setButtonState(button, state, message = "") {
+  button.disabled = state === "loading";
+  button.classList.remove("loading", "success", "error");
+  if (state === "loading") {
+    button.classList.add("loading");
     button.dataset.originalText = button.innerHTML;
     button.innerHTML = '<i class="fas fa-spinner"></i>';
-  } else if (state === 'success') {
-    button.classList.add('success');
-    showNotification(message || 'Done!', 'success');
-    setTimeout(() => button.classList.remove('success'), 2000);
-  } else if (state === 'error') {
-    showNotification(message || 'An error occurred', 'error');
-  } else if (state === 'reset' && button.dataset.originalText) {
+  } else if (state === "success") {
+    button.classList.add("success");
+    showNotification(message || "Done!", "success");
+    setTimeout(() => button.classList.remove("success"), 2000);
+  } else if (state === "error") {
+    showNotification(message || "An error occurred", "error");
+  } else if (state === "reset" && button.dataset.originalText) {
     button.innerHTML = button.dataset.originalText;
   }
 }
 
 // ── Download PDF ───────────────────────────────────────
 async function downloadPDF() {
-  const button = document.querySelector('.btn-pdf');
+  const button = document.querySelector(".btn-pdf");
   try {
-    setButtonState(button, 'loading');
+    setButtonState(button, "loading");
     updateProgress(0);
-    const frame = document.getElementById('previewFrame');
-    const canvas = await html2canvas(frame.contentDocument.body, { scale: 2, useCORS: true, allowTaint: true, logging: false });
+    const frame = document.getElementById("previewFrame");
+    const canvas = await html2canvas(frame.contentDocument.body, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+    });
     updateProgress(50);
-    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-    pdf.save('assignment-cover.pdf');
-    setButtonState(button, 'success', 'PDF downloaded!');
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+    pdf.addImage(imgData, "JPEG", 0, 0, 210, 297);
+    pdf.save("assignment-cover.pdf");
+    setButtonState(button, "success", "PDF downloaded!");
     updateProgress(100);
   } catch (error) {
-    console.error('PDF error:', error);
-    setButtonState(button, 'error', 'Error generating PDF');
+    console.error("PDF error:", error);
+    setButtonState(button, "error", "Error generating PDF");
   } finally {
-    setTimeout(() => setButtonState(button, 'reset'), 2000);
+    setTimeout(() => setButtonState(button, "reset"), 2000);
   }
 }
 
 // ── Download JPG ───────────────────────────────────────
 async function downloadJPG() {
-  const button = document.querySelector('.btn-jpg');
+  const button = document.querySelector(".btn-jpg");
   try {
-    setButtonState(button, 'loading');
-    const frame = document.getElementById('previewFrame');
-    const canvas = await html2canvas(frame.contentDocument.body, { scale: 2, useCORS: true });
-    const link = document.createElement('a');
-    link.download = 'assignment-cover.jpg';
-    link.href = canvas.toDataURL('image/jpeg', 1.0);
+    setButtonState(button, "loading");
+    const frame = document.getElementById("previewFrame");
+    const canvas = await html2canvas(frame.contentDocument.body, {
+      scale: 2,
+      useCORS: true,
+    });
+    const link = document.createElement("a");
+    link.download = "assignment-cover.jpg";
+    link.href = canvas.toDataURL("image/jpeg", 1.0);
     link.click();
-    setButtonState(button, 'success', 'JPG downloaded!');
+    setButtonState(button, "success", "JPG downloaded!");
   } catch (error) {
-    console.error('JPG error:', error);
-    setButtonState(button, 'error', 'Error generating image');
+    console.error("JPG error:", error);
+    setButtonState(button, "error", "Error generating image");
   } finally {
-    setTimeout(() => setButtonState(button, 'reset'), 2000);
+    setTimeout(() => setButtonState(button, "reset"), 2000);
   }
 }
 
 // ── Print ──────────────────────────────────────────────
 function printCover() {
-  const frame = document.getElementById('previewFrame');
-  try { frame.contentWindow.print(); }
-  catch (err) { showNotification('Unable to print', 'error'); }
+  const frame = document.getElementById("previewFrame");
+  try {
+    frame.contentWindow.print();
+  } catch (err) {
+    showNotification("Unable to print", "error");
+  }
 }
 
 // ── Save / Load ────────────────────────────────────────
 function saveFormData() {
-  const button = document.querySelector('.btn-save');
+  const button = document.querySelector(".btn-save");
   try {
-    if (button) setButtonState(button, 'loading');
+    if (button) setButtonState(button, "loading");
     const formData = {
-      studentName: document.getElementById('studentName').value,
-      rollNumber: document.getElementById('rollNumber').value,
-      classRoll: document.getElementById('classRoll').value,
-      semester: document.getElementById('semester').value,
-      subject: document.getElementById('subject').value,
-      courseCode: document.getElementById('courseCode').value,
-      submissionDate: document.getElementById('submissionDate').value,
-      assignmentType: document.getElementById('assignmentType').value,
-      themeColor: document.getElementById('themeColor').value,
-      template: document.getElementById('template').value
+      studentName: document.getElementById("studentName").value,
+      rollNumber: document.getElementById("rollNumber").value,
+      classRoll: document.getElementById("classRoll").value,
+      semester: document.getElementById("semester").value,
+      subject: document.getElementById("subject").value,
+      courseCode: document.getElementById("courseCode").value,
+      submissionDate: document.getElementById("submissionDate").value,
+      assignmentType: document.getElementById("assignmentType").value,
+      themeColor: document.getElementById("themeColor").value,
+      template: document.getElementById("template").value,
     };
-    localStorage.setItem('coverGeneratorData', JSON.stringify(formData));
-    if (button) setButtonState(button, 'success', 'Data saved!');
+    localStorage.setItem("coverGeneratorData", JSON.stringify(formData));
+    if (button) setButtonState(button, "success", "Data saved!");
   } catch (err) {
-    if (button) setButtonState(button, 'error', 'Unable to save');
+    if (button) setButtonState(button, "error", "Unable to save");
   } finally {
-    if (button) setTimeout(() => setButtonState(button, 'reset'), 2000);
+    if (button) setTimeout(() => setButtonState(button, "reset"), 2000);
   }
 }
 
 function loadFormData() {
-  const saved = localStorage.getItem('coverGeneratorData');
+  const saved = localStorage.getItem("coverGeneratorData");
   if (saved) {
     const formData = JSON.parse(saved);
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       const el = document.getElementById(key);
       if (el) el.value = formData[key];
     });
     // Sync template card
     if (formData.template) {
-      document.querySelectorAll('.template-card').forEach(c => {
-        c.classList.toggle('active', c.dataset.template === formData.template);
+      document.querySelectorAll(".template-card").forEach((c) => {
+        c.classList.toggle("active", c.dataset.template === formData.template);
       });
     }
     // Sync color swatch
     if (formData.themeColor) {
-      document.querySelectorAll('.color-swatch').forEach(s => {
-        s.classList.toggle('active', s.dataset.color === formData.themeColor);
+      document.querySelectorAll(".color-swatch").forEach((s) => {
+        s.classList.toggle("active", s.dataset.color === formData.themeColor);
       });
     }
     generateCoverPage();
@@ -692,27 +737,34 @@ function loadFormData() {
 }
 
 // ── Notifications ──────────────────────────────────────
-function showNotification(message, type = 'success') {
-  const notification = document.createElement('div');
+function showNotification(message, type = "success") {
+  const notification = document.createElement("div");
   notification.className = `notification ${type}`;
-  notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+  notification.innerHTML = `<i class="fas fa-${type === "success" ? "check-circle" : "exclamation-circle"}"></i> ${message}`;
   document.body.appendChild(notification);
   setTimeout(() => {
-    notification.classList.add('show');
+    notification.classList.add("show");
     setTimeout(() => {
-      notification.classList.remove('show');
+      notification.classList.remove("show");
       setTimeout(() => notification.remove(), 400);
     }, 3000);
   }, 10);
 }
 
 // ── 3-Mode Theme System: Auto / Light / Dark ──────────
-const THEME_MODES = ['auto', 'light', 'dark'];
-const THEME_ICONS = { auto: 'fa-circle-half-stroke', light: 'fa-sun', dark: 'fa-moon' };
-const THEME_LABELS = { auto: 'Auto', light: 'Light', dark: 'Dark' };
+const THEME_MODES = ["auto", "light", "dark"];
+const THEME_ICONS = {
+  auto: "fa-circle-half-stroke",
+  light: "fa-sun",
+  dark: "fa-moon",
+};
+const THEME_LABELS = { auto: "Auto", light: "Light", dark: "Dark" };
 
 function getSystemPrefersDark() {
-  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return (
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
 }
 
 function getTimePrefersDark() {
@@ -721,114 +773,137 @@ function getTimePrefersDark() {
 }
 
 function shouldBeDark(mode) {
-  if (mode === 'dark') return true;
-  if (mode === 'light') return false;
+  if (mode === "dark") return true;
+  if (mode === "light") return false;
   // Auto: System preference first, time fallback
   return getSystemPrefersDark() || getTimePrefersDark();
 }
 
 function applyThemeMode(mode) {
   const dark = shouldBeDark(mode);
-  document.body.classList.toggle('dark-theme', dark);
+  document.body.classList.toggle("dark-theme", dark);
 
-  const icon = document.getElementById('themeIcon');
-  const label = document.getElementById('themeLabel');
+  const icon = document.getElementById("themeIcon");
+  const label = document.getElementById("themeLabel");
   if (icon) {
-    icon.className = ''; // Clear all classes
-    icon.classList.add('fas', THEME_ICONS[mode]);
+    icon.className = ""; // Clear all classes
+    icon.classList.add("fas", THEME_ICONS[mode]);
   }
   if (label) label.textContent = THEME_LABELS[mode];
 }
 
 function toggleTheme() {
-  const current = localStorage.getItem('themeMode') || 'auto';
+  const current = localStorage.getItem("themeMode") || "auto";
   const idx = THEME_MODES.indexOf(current);
   const next = THEME_MODES[(idx + 1) % THEME_MODES.length];
-  localStorage.setItem('themeMode', next);
+  localStorage.setItem("themeMode", next);
   applyThemeMode(next);
-  showNotification(`Theme: ${THEME_LABELS[next]}`, 'success');
+  showNotification(`Theme: ${THEME_LABELS[next]}`, "success");
 }
 
 // Listen for system preference changes (for Auto mode)
 if (window.matchMedia) {
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    const mode = localStorage.getItem('themeMode') || 'auto';
-    if (mode === 'auto') applyThemeMode('auto');
-  });
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => {
+      const mode = localStorage.getItem("themeMode") || "auto";
+      if (mode === "auto") applyThemeMode("auto");
+    });
 }
 
 // Re-check time-based theme every 5 minutes (for Auto mode)
 setInterval(() => {
-  const mode = localStorage.getItem('themeMode') || 'auto';
-  if (mode === 'auto') applyThemeMode('auto');
+  const mode = localStorage.getItem("themeMode") || "auto";
+  if (mode === "auto") applyThemeMode("auto");
 }, 300000);
 
 // ── Font Size ──────────────────────────────────────────
 function adjustFontSize(action) {
-  const preview = document.getElementById('previewFrame').contentDocument.body;
+  const preview = document.getElementById("previewFrame").contentDocument.body;
   if (!preview) return;
   const currentSize = parseFloat(getComputedStyle(preview).fontSize);
-  preview.style.fontSize = `${action === 'increase' ? currentSize * 1.1 : currentSize * 0.9}px`;
+  preview.style.fontSize = `${action === "increase" ? currentSize * 1.1 : currentSize * 0.9}px`;
 }
 
 // ── Share ──────────────────────────────────────────────
 function shareForm() {
   if (navigator.share) {
-    navigator.share({ title: 'Assignment Cover Generator', text: 'Generate professional assignment covers easily!', url: window.location.href }).catch(() => fallbackShare());
-  } else { fallbackShare(); }
+    navigator
+      .share({
+        title: "Assignment Cover Generator",
+        text: "Generate professional assignment covers easily!",
+        url: window.location.href,
+      })
+      .catch(() => fallbackShare());
+  } else {
+    fallbackShare();
+  }
 }
 
 function fallbackShare() {
-  navigator.clipboard.writeText(window.location.href)
-    .then(() => showNotification('Link copied!'))
-    .catch(() => showNotification('Unable to copy link', 'error'));
+  navigator.clipboard
+    .writeText(window.location.href)
+    .then(() => showNotification("Link copied!"))
+    .catch(() => showNotification("Unable to copy link", "error"));
 }
 
 // ── Reset ──────────────────────────────────────────────
 function resetForm() {
-  document.getElementById('coverForm').reset();
-  document.querySelectorAll('.error-message').forEach(m => m.remove());
-  document.querySelectorAll('.invalid').forEach(f => f.classList.remove('invalid'));
-  document.getElementById('themeColor').value = '#1a237e';
-  document.getElementById('template').value = 'classic';
-  document.querySelectorAll('.template-card').forEach(c => c.classList.toggle('active', c.dataset.template === 'classic'));
-  document.querySelectorAll('.color-swatch').forEach(s => s.classList.toggle('active', s.dataset.color === '#1a237e'));
+  document.getElementById("coverForm").reset();
+  document.querySelectorAll(".error-message").forEach((m) => m.remove());
+  document
+    .querySelectorAll(".invalid")
+    .forEach((f) => f.classList.remove("invalid"));
+  document.getElementById("themeColor").value = "#1a237e";
+  document.getElementById("template").value = "classic";
+  document
+    .querySelectorAll(".template-card")
+    .forEach((c) =>
+      c.classList.toggle("active", c.dataset.template === "classic"),
+    );
+  document
+    .querySelectorAll(".color-swatch")
+    .forEach((s) =>
+      s.classList.toggle("active", s.dataset.color === "#1a237e"),
+    );
   generateCoverPage();
-  showNotification('Form reset!');
-  try { localStorage.removeItem('coverGeneratorData'); } catch (e) {}
+  showNotification("Form reset!");
+  try {
+    localStorage.removeItem("coverGeneratorData");
+  } catch (e) {}
 }
 
 // ── Help ───────────────────────────────────────────────
 function showHelp() {
-  document.getElementById('helpModal').classList.add('active');
-  document.body.style.overflow = 'hidden';
+  document.getElementById("helpModal").classList.add("active");
+  document.body.style.overflow = "hidden";
 }
 
 function hideHelp() {
-  document.getElementById('helpModal').classList.remove('active');
-  document.body.style.overflow = 'auto';
+  document.getElementById("helpModal").classList.remove("active");
+  document.body.style.overflow = "auto";
 }
 
-document.getElementById('helpModal').addEventListener('click', function(e) {
+document.getElementById("helpModal").addEventListener("click", function (e) {
   if (e.target === this) hideHelp();
 });
 
 // ── Welcome Modal ──────────────────────────────────────
 function showWelcomeModal() {
-  const modal = document.getElementById('welcomeModal');
-  if (modal && !localStorage.getItem('dontShowWelcomeModal')) {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+  const modal = document.getElementById("welcomeModal");
+  if (modal && !localStorage.getItem("dontShowWelcomeModal")) {
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
   }
 }
 
 function skipWelcome(savePref) {
-  const modal = document.getElementById('welcomeModal');
+  const modal = document.getElementById("welcomeModal");
   if (modal) {
-    modal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    if (savePref && document.getElementById('dontShowAgain').checked) {
-      localStorage.setItem('dontShowWelcomeModal', 'true');
+    modal.classList.remove("active");
+    document.body.style.overflow = "auto";
+    if (savePref && document.getElementById("dontShowAgain").checked) {
+      localStorage.setItem("dontShowWelcomeModal", "true");
     }
   }
 }
@@ -838,56 +913,85 @@ function continueToGuide() {
   showHelp();
 }
 
-document.getElementById('welcomeModal').addEventListener('click', function(e) {
+document.getElementById("welcomeModal").addEventListener("click", function (e) {
   if (e.target === this) skipWelcome(false);
 });
 
 // ── Progress Bar ───────────────────────────────────────
 function updateProgress(progress) {
-  const bar = document.getElementById('progressBar');
+  const bar = document.getElementById("progressBar");
   bar.style.width = `${progress}%`;
-  if (progress === 100) setTimeout(() => { bar.style.width = '0'; }, 500);
+  if (progress === 100)
+    setTimeout(() => {
+      bar.style.width = "0";
+    }, 500);
 }
 
 // ── Loading Overlay ────────────────────────────────────
-function showLoading() { document.querySelector('.loading-overlay').classList.add('active'); }
-function hideLoading() { document.querySelector('.loading-overlay').classList.remove('active'); }
+function showLoading() {
+  document.querySelector(".loading-overlay").classList.add("active");
+}
+function hideLoading() {
+  document.querySelector(".loading-overlay").classList.remove("active");
+}
 
 // ── Keyboard Shortcuts ─────────────────────────────────
 const shortcuts = {
-  submit: { key: 'Enter', ctrl: true, description: 'Generate Cover' },
-  save: { key: 's', ctrl: true, description: 'Save Form Data' },
-  load: { key: 'l', ctrl: true, description: 'Load Form Data' },
-  theme: { key: 't', ctrl: true, description: 'Toggle Theme' },
-  help: { key: 'h', ctrl: true, description: 'Show Help' },
-  reset: { key: 'r', ctrl: true, description: 'Reset Form' },
-  print: { key: 'p', ctrl: true, description: 'Print Cover' },
+  submit: { key: "Enter", ctrl: true, description: "Generate Cover" },
+  save: { key: "s", ctrl: true, description: "Save Form Data" },
+  load: { key: "l", ctrl: true, description: "Load Form Data" },
+  theme: { key: "t", ctrl: true, description: "Toggle Theme" },
+  help: { key: "h", ctrl: true, description: "Show Help" },
+  reset: { key: "r", ctrl: true, description: "Reset Form" },
+  print: { key: "p", ctrl: true, description: "Print Cover" },
 };
 
 function initShortcuts() {
-  const list = document.getElementById('shortcutList');
+  const list = document.getElementById("shortcutList");
   if (list) {
-    list.innerHTML = Object.entries(shortcuts).map(([, config]) =>
-      `<div class="shortcut-item"><span>${config.description}</span><span class="shortcut-key">${config.ctrl ? 'Ctrl + ' : ''}${config.key.toUpperCase()}</span></div>`
-    ).join('');
+    list.innerHTML = Object.entries(shortcuts)
+      .map(
+        ([, config]) =>
+          `<div class="shortcut-item"><span>${config.description}</span><span class="shortcut-key">${config.ctrl ? "Ctrl + " : ""}${config.key.toUpperCase()}</span></div>`,
+      )
+      .join("");
   }
 }
 
-document.addEventListener('keydown', (e) => {
-  if (e.target.matches('input, textarea, select')) return;
-  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+document.addEventListener("keydown", (e) => {
+  if (e.target.matches("input, textarea, select")) return;
+  const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
   const mod = isMac ? e.metaKey : e.ctrlKey;
   for (const [action, config] of Object.entries(shortcuts)) {
-    if (e.key.toLowerCase() === config.key.toLowerCase() && mod === config.ctrl) {
+    if (
+      e.key.toLowerCase() === config.key.toLowerCase() &&
+      mod === config.ctrl
+    ) {
       e.preventDefault();
       switch (action) {
-        case 'submit': document.getElementById('coverForm').dispatchEvent(new Event('submit')); break;
-        case 'save': saveFormData(); break;
-        case 'load': loadFormData(); break;
-        case 'theme': toggleTheme(); break;
-        case 'help': showHelp(); break;
-        case 'reset': resetForm(); break;
-        case 'print': printCover(); break;
+        case "submit":
+          document
+            .getElementById("coverForm")
+            .dispatchEvent(new Event("submit"));
+          break;
+        case "save":
+          saveFormData();
+          break;
+        case "load":
+          loadFormData();
+          break;
+        case "theme":
+          toggleTheme();
+          break;
+        case "help":
+          showHelp();
+          break;
+        case "reset":
+          resetForm();
+          break;
+        case "print":
+          printCover();
+          break;
       }
       break;
     }
@@ -895,12 +999,12 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Close modals with Escape
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
     hideHelp();
-    const wm = document.getElementById('welcomeModal');
-    if (wm && wm.classList.contains('active')) skipWelcome(false);
-    document.getElementById('shortcutsModal').classList.remove('active');
+    const wm = document.getElementById("welcomeModal");
+    if (wm && wm.classList.contains("active")) skipWelcome(false);
+    document.getElementById("shortcutsModal").classList.remove("active");
   }
 });
 
@@ -909,38 +1013,67 @@ let autoSaveInterval;
 function startAutoSave() {
   if (autoSaveInterval) clearInterval(autoSaveInterval);
   autoSaveInterval = setInterval(() => {
-    if (document.visibilityState === 'visible') {
-      try { saveFormData(); } catch (e) { clearInterval(autoSaveInterval); }
+    if (document.visibilityState === "visible") {
+      try {
+        saveFormData();
+      } catch (e) {
+        clearInterval(autoSaveInterval);
+      }
     }
   }, 30000);
 }
 
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') startAutoSave();
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") startAutoSave();
   else clearInterval(autoSaveInterval);
 });
 
 // ── Swipe to Switch Template ───────────────────────────
 let touchStartX = 0;
-document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-document.addEventListener('touchend', e => {
-  const diff = e.changedTouches[0].screenX - touchStartX;
-  if (Math.abs(diff) > 50) switchTemplate(diff > 0 ? 'prev' : 'next');
-}, { passive: true });
+document.addEventListener(
+  "touchstart",
+  (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  },
+  { passive: true },
+);
+document.addEventListener(
+  "touchend",
+  (e) => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(diff) > 50) switchTemplate(diff > 0 ? "prev" : "next");
+  },
+  { passive: true },
+);
 
 function switchTemplate(direction) {
-  const templates = ['classic', 'modern', 'minimal', 'professional', 'elegant', 'creative', 'academic'];
-  const current = document.getElementById('template').value;
+  const templates = [
+    "classic",
+    "modern",
+    "minimal",
+    "professional",
+    "elegant",
+    "creative",
+    "academic",
+  ];
+  const current = document.getElementById("template").value;
   const idx = templates.indexOf(current);
-  const newIdx = direction === 'next' ? (idx + 1) % templates.length : (idx - 1 + templates.length) % templates.length;
-  document.getElementById('template').value = templates[newIdx];
-  document.querySelectorAll('.template-card').forEach(c => c.classList.toggle('active', c.dataset.template === templates[newIdx]));
+  const newIdx =
+    direction === "next"
+      ? (idx + 1) % templates.length
+      : (idx - 1 + templates.length) % templates.length;
+  document.getElementById("template").value = templates[newIdx];
+  document
+    .querySelectorAll(".template-card")
+    .forEach((c) =>
+      c.classList.toggle("active", c.dataset.template === templates[newIdx]),
+    );
   generateCoverPage();
 }
 
 // Arrow keys for template switching
-document.addEventListener('keydown', (e) => {
-  if (e.target.matches('input, textarea, select')) return;
-  if (e.key === 'ArrowLeft') switchTemplate('prev');
-  else if (e.key === 'ArrowRight') switchTemplate('next');
+document.addEventListener("keydown", (e) => {
+  if (e.target.matches("input, textarea, select")) return;
+  if (e.key === "ArrowLeft") switchTemplate("prev");
+  else if (e.key === "ArrowRight") switchTemplate("next");
 });
