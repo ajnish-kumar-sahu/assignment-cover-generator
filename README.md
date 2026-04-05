@@ -1,6 +1,4 @@
-I'll create a comprehensive, professional README for your ScholarFlow project based on all the code I've analyzed. Let me write and push it to your repository.I need to create a detailed and accurate README based on your actual codebase. Let me generate a comprehensive README with all the specific details from your project:Now I'll create a comprehensive, production-grade README that reflects the actual architecture and structure of your codebase:
 
-````markdown
 # 📚 ScholarFlow - The Academic Editorial Suite
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
