@@ -14,7 +14,10 @@ export default function Settings() {
   }, [theme, dpi, autoSync, updateSettings]);
 
   return (
-    <DocLayout title="System Configurations">
+    <DocLayout 
+      title="System Configurations"
+      breadcrumbs={[{ label: 'Settings', icon: 'settings' }]}
+    >
       <div className="max-w-4xl mx-auto mt-10">
         <p className="text-slate-500 font-light text-lg mb-12">Fine-tune ScholarFlow to match your institutional requirements and aesthetic formatting defaults.</p>
         

@@ -22,7 +22,10 @@ export default function MyCovers() {
   };
 
   return (
-    <DocLayout title="My Covers">
+    <DocLayout 
+      title="My Covers"
+      breadcrumbs={[{ label: 'Workspace', href: '/cover-generator', icon: 'edit' }, { label: 'My Covers' }]}
+    >
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

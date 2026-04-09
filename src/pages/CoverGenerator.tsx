@@ -5,6 +5,7 @@ import { downloadPDF, downloadJPG, printDocument } from '../utils/exportUtils';
 import { useAppStore } from '../store/useAppStore';
 import { useFormValidation } from '../hooks/useFormValidation';
 import { useDebouncedCallback } from 'use-debounce';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import Logo from '../components/Logo';
 
 const DEFAULT_DATA: CoverData = {
@@ -86,6 +87,8 @@ export default function CoverGenerator() {
   const [exportProgress, setExportProgress] = useState<number | null>(null);
   const [scale, setScale] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 1024);
+  const [activeTab, setActiveTab] = useState<'form' | 'preview'>('form');
+  const [expandedSections, setExpandedSections] = useState({ institutional: true, student: true, document: false, design: true });
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -133,6 +136,25 @@ export default function CoverGenerator() {
     return () => observer.disconnect();
   }, []);
 
+  // Keyboard shortcuts
+  const handleExportPDF = async () => {
+    if (!isValid || loading) return;
+    setLoading(true);
+    setExportProgress(0);
+    try {
+      await downloadPDF(iframeRef, 'assignment-cover.pdf', setExportProgress);
+      addNotification({ message: 'PDF exported successfully', type: 'success' });
+    } catch(err) {
+      addNotification({ message: 'Export failed', type: 'error' });
+    }
+    setLoading(false);
+    setExportProgress(null);
+  };
+
+  useKeyboardShortcuts([
+    { key: 'e', ctrlKey: true, callback: handleExportPDF },
+  ]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -161,6 +183,18 @@ export default function CoverGenerator() {
     setData(DEFAULT_DATA);
     addNotification({ message: 'Design reset to defaults', type: 'info' });
   };
+
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+  // Count filled required fields for progress indicator
+  const requiredFields = { subject: data.subject, studentName: data.studentName, rollNumber: data.rollNumber, courseCode: data.courseCode };
+  const filledRequired = Object.values(requiredFields).filter(v => v && v.trim()).length;
+  const totalRequired = Object.keys(requiredFields).length;
+  const progressPercent = (filledRequired / totalRequired) * 100;
 
   return (
     <>
@@ -311,145 +345,228 @@ export default function CoverGenerator() {
               </div>
             </section>
 
+            {/* Mobile Tab Navigation */}
+            <div className="md:hidden mb-8 flex gap-2 bg-slate-100 rounded-xl p-1">
+              <button onClick={() => setActiveTab('form')} className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${activeTab === 'form' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}>
+                <span className="material-symbols-outlined text-lg align-middle mr-1">edit</span>Form
+              </button>
+              <button onClick={() => setActiveTab('preview')} className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${activeTab === 'preview' ? 'bg-white text-primary shadow-sm' : 'text-slate-600'}`}>
+                <span className="material-symbols-outlined text-lg align-middle mr-1">preview</span>Preview
+              </button>
+            </div>
+
             {/* Workspace Layout */}
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-12 items-start">
+            <div className={`grid grid-cols-1 xl:grid-cols-12 gap-12 items-start ${isMobile && activeTab === 'preview' ? 'hidden' : ''}`}>
 
               {/* LEFT PANEL: Form */}
-              <div className="xl:col-span-5 space-y-8">
-                <div className="bg-surface-container border border-outline-variant/30 rounded-2xl p-8 shadow-sm">
-                  <h3 className="font-headline text-3xl mb-8 text-indigo-950">Document Details</h3>
-                  <form className="space-y-6">
-                    <div className="space-y-4 pb-6 border-b border-outline-variant/30">
-                      <h4 className="font-headline text-xl text-indigo-900">Institutional Identity</h4>
+              <div className={`xl:col-span-5 space-y-6 ${isMobile && activeTab === 'preview' ? 'hidden' : ''}`}>
+                <div className="bg-surface-container border border-outline-variant/30 rounded-2xl p-6 lg:p-8 shadow-sm">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="font-headline text-2xl lg:text-3xl text-indigo-950">Document Details</h3>
+                      <p className="text-xs text-on-surface-variant mt-1">Complete the form to generate your cover</p>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <div className="text-xs font-bold text-slate-500 mb-1">Progress</div>
+                      <div className="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${progressPercent}%` }}></div>
+                      </div>
+                    </div>
+                  </div>
+                  <form className="space-y-4">
+                    {/* SECTION 1: Institutional Identity */}
+                    <div className="border border-outline-variant/20 rounded-xl overflow-hidden">
+                      <button type="button" onClick={() => toggleSection('institutional')} className="w-full flex items-center justify-between p-4 hover:bg-slate-50/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <span className="material-symbols-outlined text-primary">account_balance</span>
+                          <div className="text-left">
+                            <h4 className="font-headline text-lg text-indigo-900">Institutional Identity</h4>
+                            <p className="text-xs text-on-surface-variant">University, department, and logo</p>
+                          </div>
+                        </div>
+                        <span className={`material-symbols-outlined text-slate-400 transition-transform ${expandedSections.institutional ? 'rotate-180' : ''}`}>expand_more</span>
+                      </button>
+                      {expandedSections.institutional && (
+                        <div className="px-4 pb-4 space-y-4 border-t border-outline-variant/20 bg-slate-50/30 pt-4">
+                      <h4 className="font-headline text-sm text-indigo-900 mb-2">Institutional Identity</h4>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">University Name</label>
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">University <span className="text-red-500">*</span></label>
                           <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">account_balance</span>
-                            <input name="universityName" value={data.universityName || ''} onChange={handleChange} placeholder="e.g. Oxford University" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm outline-none" type="text" />
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">account_balance</span>
+                            <input name="universityName" value={data.universityName || ''} onChange={handleChange} placeholder="e.g. Oxford University" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
                           </div>
                         </div>
                         <div className="space-y-2 relative group">
                           <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Department</label>
                           <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">domain</span>
-                            <input name="department" value={data.department || ''} onChange={handleChange} placeholder="e.g. Dept. of Computer Science" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm outline-none" type="text" />
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">domain</span>
+                            <input name="department" value={data.department || ''} onChange={handleChange} placeholder="e.g. Computer Science" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
                           </div>
                         </div>
                       </div>
                       <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Logo URL (Optional Image)</label>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Logo URL</label>
                         <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">image</span>
-                          <input name="logoUrl" value={data.logoUrl || ''} onChange={handleChange} placeholder="https://example.com/logo.png" className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm outline-none" type="url" />
+                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">image</span>
+                          <input name="logoUrl" value={data.logoUrl || ''} onChange={handleChange} placeholder="https://example.com/logo.png" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="url" />
                         </div>
                       </div>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="space-y-2 pt-2 relative group">
-                      <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Title of the Research</label>
-                      <div className="relative">
-                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">menu_book</span>
-                        <input name="subject" value={data.subject} onChange={handleChange} className={`w-full bg-surface-container-lowest border rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all shadow-sm outline-none ${errors.subject ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                    {/* SECTION 2: Student & Document Info */}
+                    <div className="border border-outline-variant/20 rounded-xl overflow-hidden">
+                      <button type="button" onClick={() => toggleSection('student')} className="w-full flex items-center justify-between p-4 hover:bg-slate-50/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <span className="material-symbols-outlined text-primary">person</span>
+                          <div className="text-left">
+                            <h4 className="font-headline text-lg text-indigo-900">Student Information</h4>
+                            <p className="text-xs text-on-surface-variant">Name, ID, and course details</p>
+                          </div>
+                        </div>
+                        <span className={`material-symbols-outlined text-slate-400 transition-transform ${expandedSections.student ? 'rotate-180' : ''}`}>expand_more</span>
+                      </button>
+                      {expandedSections.student && (
+                        <div className="px-4 pb-4 space-y-4 border-t border-outline-variant/20 bg-slate-50/30 pt-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2 relative group">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Student Name <span className="text-red-500">*</span></label>
+                          <div className="relative">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">person</span>
+                            <input name="studentName" value={data.studentName} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.studentName ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                          </div>
+                          {errors.studentName && <p className="text-xs text-red-500 ml-1">{errors.studentName}</p>}
+                        </div>
+                        <div className="space-y-2 relative group">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Faculty / Instructor</label>
+                          <div className="relative">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">badge</span>
+                            <input className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" placeholder="Instructor Name" type="text" />
+                          </div>
+                        </div>
                       </div>
-                      {errors.subject && <p className="text-xs text-red-500 ml-1">{errors.subject}</p>}
+
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="space-y-2 relative group">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Roll <span className="text-red-500">*</span></label>
+                          <div className="relative">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">pin</span>
+                            <input name="rollNumber" value={data.rollNumber} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-semibold font-mono focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.rollNumber ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                          </div>
+                          {errors.rollNumber && <p className="text-xs text-red-500 ml-1">{errors.rollNumber}</p>}
+                        </div>
+                        <div className="space-y-2 relative group">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Class Roll</label>
+                          <div className="relative">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">numbers</span>
+                            <input name="classRoll" value={data.classRoll} onChange={handleChange} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-semibold font-mono focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
+                          </div>
+                        </div>
+                        <div className="space-y-2 relative group">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Semester</label>
+                          <div className="relative">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-lg">school</span>
+                            <select name="semester" value={data.semester} onChange={handleChange} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-10 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none appearance-none">
+                              <option value="Fall 2024">Fall 2024</option>
+                              <option value="Spring 2025">Spring 2025</option>
+                              <option value="1st">1st Trimester</option>
+                              <option value="2nd">2nd Trimester</option>
+                              <option value="3rd">3rd Trimester</option>
+                            </select>
+                            <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
+                          </div>
+                        </div>
+                      </div>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Student Name</label>
-                        <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">person</span>
-                          <input name="studentName" value={data.studentName} onChange={handleChange} className={`w-full bg-surface-container-lowest border rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all shadow-sm outline-none ${errors.studentName ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                    {/* SECTION 3: Document Details */}
+                    <div className="border border-outline-variant/20 rounded-xl overflow-hidden">
+                      <button type="button" onClick={() => toggleSection('document')} className="w-full flex items-center justify-between p-4 hover:bg-slate-50/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <span className="material-symbols-outlined text-primary">description</span>
+                          <div className="text-left">
+                            <h4 className="font-headline text-lg text-indigo-900">Document Details</h4>
+                            <p className="text-xs text-on-surface-variant">Title, dates, and assignment info</p>
+                          </div>
                         </div>
-                        {errors.studentName && <p className="text-xs text-red-500 ml-1">{errors.studentName}</p>}
-                      </div>
+                        <span className={`material-symbols-outlined text-slate-400 transition-transform ${expandedSections.document ? 'rotate-180' : ''}`}>expand_more</span>
+                      </button>
+                      {expandedSections.document && (
+                        <div className="px-4 pb-4 space-y-4 border-t border-outline-variant/20 bg-slate-50/30 pt-4">
                       <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Faculty / Instructor</label>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Research Title <span className="text-red-500">*</span></label>
                         <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">badge</span>
-                          <input className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm outline-none" placeholder="Instructor Name" type="text" />
+                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">menu_book</span>
+                          <input name="subject" value={data.subject} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.subject ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                        </div>
+                        {errors.subject && <p className="text-xs text-red-500 ml-1">{errors.subject}</p>}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2 relative group">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Submission Date</label>
+                          <div className="relative">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-lg">calendar_today</span>
+                            <input name="submissionDate" type="date" value={data.submissionDate} onChange={handleChange} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" />
+                          </div>
+                        </div>
+                        <div className="space-y-2 relative group">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Assignment Type</label>
+                          <div className="relative">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">assignment</span>
+                            <input name="assignmentType" value={data.assignmentType} onChange={handleChange} placeholder="e.g. Term Project" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
+                          </div>
                         </div>
                       </div>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Roll No.</label>
-                        <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">pin</span>
-                          <input name="rollNumber" value={data.rollNumber} onChange={handleChange} className={`w-full bg-surface-container-lowest border rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-semibold font-mono focus:ring-4 focus:ring-primary/10 transition-all shadow-sm outline-none ${errors.rollNumber ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                    {/* SECTION 4: Design & Theme */}
+                    <div className="border border-outline-variant/20 rounded-xl overflow-hidden">
+                      <button type="button" onClick={() => toggleSection('design')} className="w-full flex items-center justify-between p-4 hover:bg-slate-50/50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <span className="material-symbols-outlined text-primary">palette</span>
+                          <div className="text-left">
+                            <h4 className="font-headline text-lg text-indigo-900">Design & Theme</h4>
+                            <p className="text-xs text-on-surface-variant">Colors, course code, and styling</p>
+                          </div>
                         </div>
-                        {errors.rollNumber && <p className="text-xs text-red-500 ml-1">{errors.rollNumber}</p>}
-                      </div>
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Class Roll</label>
-                        <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">numbers</span>
-                          <input name="classRoll" value={data.classRoll} onChange={handleChange} className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-semibold font-mono focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm outline-none" type="text" />
+                        <span className={`material-symbols-outlined text-slate-400 transition-transform ${expandedSections.design ? 'rotate-180' : ''}`}>expand_more</span>
+                      </button>
+                      {expandedSections.design && (
+                        <div className="px-4 pb-4 space-y-4 border-t border-outline-variant/20 bg-slate-50/30 pt-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2 relative group">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Course Code <span className="text-red-500">*</span></label>
+                          <div className="relative">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">tag</span>
+                            <input name="courseCode" value={data.courseCode} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-bold font-mono focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.courseCode ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                          </div>
+                          {errors.courseCode && <p className="text-xs text-red-500 ml-1">{errors.courseCode}</p>}
+                        </div>
+                        <div className="space-y-2 relative group">
+                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Theme Color</label>
+                          <div className="relative flex items-center gap-3">
+                            <input name="themeColor" value={data.themeColor} onChange={handleChange} className="w-16 h-12 bg-white border border-outline-variant/30 rounded-lg cursor-pointer focus:ring-4 focus:ring-primary/10 outline-none" type="color" />
+                            <div className="flex-1">
+                              <input type="text" value={data.themeColor} onChange={(e) => setData(prev => ({ ...prev, themeColor: e.target.value }))} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 px-3 text-on-surface text-sm font-mono focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" placeholder="#3525cd" />
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Semester</label>
-                        <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">school</span>
-                          <select name="semester" value={data.semester} onChange={handleChange} className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pr-10 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm outline-none appearance-none">
-                            <option value="1st">1st Trimester</option>
-                            <option value="2nd">2nd Trimester</option>
-                            <option value="3rd">3rd Trimester</option>
-                            <option value="4th">4th Trimester</option>
-                            <option value="5th">5th Trimester</option>
-                            <option value="6th">6th Trimester</option>
-                            <option value="Fall 2024">Fall 2024</option>
-                            <option value="Spring 2025">Spring 2025</option>
-                          </select>
-                          <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
                         </div>
-                      </div>
+                      )}
                     </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Course Code</label>
-                        <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">tag</span>
-                          <input name="courseCode" value={data.courseCode} onChange={handleChange} className={`w-full bg-surface-container-lowest border rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-bold font-mono focus:ring-4 focus:ring-primary/10 transition-all shadow-sm outline-none ${errors.courseCode ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
-                        </div>
-                        {errors.courseCode && <p className="text-xs text-red-500 ml-1">{errors.courseCode}</p>}
-                      </div>
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Theme Hue</label>
-                        <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors border-r pr-2 border-slate-200">palette</span>
-                          <input name="themeColor" value={data.themeColor} onChange={handleChange} className="w-full h-[54px] bg-surface-container-lowest border border-outline-variant/30 rounded-xl pl-16 pr-1 py-1 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm outline-none cursor-pointer" type="color" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Submission Date</label>
-                        <div className="relative">
-                          <input name="submissionDate" type="date" value={data.submissionDate} onChange={handleChange} className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pr-4 pl-4 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm outline-none" />
-                        </div>
-                      </div>
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Assignment Type</label>
-                        <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">assignment</span>
-                          <input name="assignmentType" value={data.assignmentType} onChange={handleChange} className="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl py-4 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm outline-none" type="text" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <button disabled={loading} onClick={updatePreview} className="w-full bg-gradient-to-br from-primary to-primary-container text-white py-4 rounded-xl font-bold uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all mt-6 flex justify-center items-center gap-2 disabled:opacity-50" type="button">
-                      {loading ? <span className="material-symbols-outlined animate-spin">refresh</span> : <span className="material-symbols-outlined">sync</span>}
-                      {loading ? 'RENDERING...' : 'SYNC PREVIEW'}
-                    </button>
                   </form>
                 </div>
 
-                {/* Moment of Insight */}
+                {/* Moment of Insight - Only show on desktop */}
+                <div className="hidden lg:block">
                 <div className="bg-surface-container-high rounded-2xl p-8 relative overflow-hidden group border border-outline-variant/20 shadow-sm">
                   <div className="absolute -top-12 -right-12 w-40 h-40 bg-tertiary-fixed-dim/20 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-700"></div>
                   <span className="material-symbols-outlined text-tertiary text-4xl mb-4">format_quote</span>
@@ -458,10 +575,11 @@ export default function CoverGenerator() {
                   </blockquote>
                   <cite className="text-sm font-bold tracking-wide text-on-surface-variant not-italic uppercase opacity-80">— Massimo Vignelli</cite>
                 </div>
+                </div>
               </div>
 
               {/* RIGHT PANEL: Interactive Preview */}
-              <div className="xl:col-span-7 flex flex-col gap-6">
+              <div className={`xl:col-span-7 flex flex-col gap-6 ${isMobile && activeTab === 'form' ? 'hidden' : ''}`}>
 
                 <div className="bg-surface-container-high rounded-3xl p-8 lg:p-12 flex justify-center items-center shadow-inner relative group border border-outline-variant/20 min-h-[600px]">
                   {/* MacOS style dots */}

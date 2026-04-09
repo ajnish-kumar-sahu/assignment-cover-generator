@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
+import Breadcrumb from './Breadcrumb';
 
 const MD3_THEME = `
   :root {
@@ -54,7 +55,21 @@ const MD3_THEME = `
   }
 `;
 
-export default function DocLayout({ title, children }: { title: string, children: React.ReactNode }) {
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+  icon?: string;
+}
+
+export default function DocLayout({ 
+  title, 
+  children, 
+  breadcrumbs = [] 
+}: { 
+  title: string
+  children: React.ReactNode
+  breadcrumbs?: BreadcrumbItem[]
+}) {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: MD3_THEME }} />
@@ -80,6 +95,7 @@ export default function DocLayout({ title, children }: { title: string, children
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring" as const, bounce: 0.3, duration: 0.8 }}
           >
+            {breadcrumbs.length > 0 && <Breadcrumb items={breadcrumbs} className="mb-8" />}
             <h1 className="font-headline text-5xl md:text-7xl text-indigo-950 mb-12 tracking-tight">{title}</h1>
             <div className="text-lg space-y-6 font-light leading-relaxed text-slate-600">
               {children}
