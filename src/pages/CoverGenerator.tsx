@@ -388,30 +388,30 @@ export default function CoverGenerator() {
                       </button>
                       {expandedSections.institutional && (
                         <div className="px-4 pb-4 space-y-4 border-t border-outline-variant/20 bg-slate-50/30 pt-4">
-                      <h4 className="font-headline text-sm text-indigo-900 mb-2">Institutional Identity</h4>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">University <span className="text-red-500">*</span></label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">account_balance</span>
-                            <input name="universityName" value={data.universityName || ''} onChange={handleChange} placeholder="e.g. Oxford University" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
+                          <h4 className="font-headline text-sm text-indigo-900 mb-2">Institutional Identity</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">University <span className="text-red-500">*</span></label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">account_balance</span>
+                                <input name="universityName" value={data.universityName || ''} onChange={handleChange} placeholder="e.g. Oxford University" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
+                              </div>
+                            </div>
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Department</label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">domain</span>
+                                <input name="department" value={data.department || ''} onChange={handleChange} placeholder="e.g. Computer Science" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Department</label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">domain</span>
-                            <input name="department" value={data.department || ''} onChange={handleChange} placeholder="e.g. Computer Science" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
+                          <div className="space-y-2 relative group">
+                            <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Logo URL</label>
+                            <div className="relative">
+                              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">image</span>
+                              <input name="logoUrl" value={data.logoUrl || ''} onChange={handleChange} placeholder="https://example.com/logo.png" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="url" />
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Logo URL</label>
-                        <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">image</span>
-                          <input name="logoUrl" value={data.logoUrl || ''} onChange={handleChange} placeholder="https://example.com/logo.png" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="url" />
-                        </div>
-                      </div>
                         </div>
                       )}
                     </div>
@@ -430,55 +430,55 @@ export default function CoverGenerator() {
                       </button>
                       {expandedSections.student && (
                         <div className="px-4 pb-4 space-y-4 border-t border-outline-variant/20 bg-slate-50/30 pt-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Student Name <span className="text-red-500">*</span></label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">person</span>
-                            <input name="studentName" value={data.studentName} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.studentName ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Student Name <span className="text-red-500">*</span></label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">person</span>
+                                <input name="studentName" value={data.studentName} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.studentName ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                              </div>
+                              {errors.studentName && <p className="text-xs text-red-500 ml-1">{errors.studentName}</p>}
+                            </div>
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Faculty / Instructor</label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">badge</span>
+                                <input className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" placeholder="Instructor Name" type="text" />
+                              </div>
+                            </div>
                           </div>
-                          {errors.studentName && <p className="text-xs text-red-500 ml-1">{errors.studentName}</p>}
-                        </div>
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Faculty / Instructor</label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">badge</span>
-                            <input className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" placeholder="Instructor Name" type="text" />
-                          </div>
-                        </div>
-                      </div>
 
-                      <div className="grid grid-cols-3 gap-3">
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Roll <span className="text-red-500">*</span></label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">pin</span>
-                            <input name="rollNumber" value={data.rollNumber} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-semibold font-mono focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.rollNumber ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                          <div className="grid grid-cols-3 gap-3">
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Roll <span className="text-red-500">*</span></label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">pin</span>
+                                <input name="rollNumber" value={data.rollNumber} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-semibold font-mono focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.rollNumber ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                              </div>
+                              {errors.rollNumber && <p className="text-xs text-red-500 ml-1">{errors.rollNumber}</p>}
+                            </div>
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Class Roll</label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">numbers</span>
+                                <input name="classRoll" value={data.classRoll} onChange={handleChange} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-semibold font-mono focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
+                              </div>
+                            </div>
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Semester</label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-lg">school</span>
+                                <select name="semester" value={data.semester} onChange={handleChange} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-10 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none appearance-none">
+                                  <option value="Fall 2024">Fall 2024</option>
+                                  <option value="Spring 2025">Spring 2025</option>
+                                  <option value="1st">1st Trimester</option>
+                                  <option value="2nd">2nd Trimester</option>
+                                  <option value="3rd">3rd Trimester</option>
+                                </select>
+                                <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
+                              </div>
+                            </div>
                           </div>
-                          {errors.rollNumber && <p className="text-xs text-red-500 ml-1">{errors.rollNumber}</p>}
-                        </div>
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Class Roll</label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">numbers</span>
-                            <input name="classRoll" value={data.classRoll} onChange={handleChange} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-semibold font-mono focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
-                          </div>
-                        </div>
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Semester</label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-lg">school</span>
-                            <select name="semester" value={data.semester} onChange={handleChange} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-10 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none appearance-none">
-                              <option value="Fall 2024">Fall 2024</option>
-                              <option value="Spring 2025">Spring 2025</option>
-                              <option value="1st">1st Trimester</option>
-                              <option value="2nd">2nd Trimester</option>
-                              <option value="3rd">3rd Trimester</option>
-                            </select>
-                            <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
-                          </div>
-                        </div>
-                      </div>
                         </div>
                       )}
                     </div>
@@ -497,31 +497,31 @@ export default function CoverGenerator() {
                       </button>
                       {expandedSections.document && (
                         <div className="px-4 pb-4 space-y-4 border-t border-outline-variant/20 bg-slate-50/30 pt-4">
-                      <div className="space-y-2 relative group">
-                        <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Research Title <span className="text-red-500">*</span></label>
-                        <div className="relative">
-                          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">menu_book</span>
-                          <input name="subject" value={data.subject} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.subject ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
-                        </div>
-                        {errors.subject && <p className="text-xs text-red-500 ml-1">{errors.subject}</p>}
-                      </div>
+                          <div className="space-y-2 relative group">
+                            <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Research Title <span className="text-red-500">*</span></label>
+                            <div className="relative">
+                              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">menu_book</span>
+                              <input name="subject" value={data.subject} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.subject ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                            </div>
+                            {errors.subject && <p className="text-xs text-red-500 ml-1">{errors.subject}</p>}
+                          </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Submission Date</label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-lg">calendar_today</span>
-                            <input name="submissionDate" type="date" value={data.submissionDate} onChange={handleChange} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" />
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Submission Date</label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-lg">calendar_today</span>
+                                <input name="submissionDate" type="date" value={data.submissionDate} onChange={handleChange} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" />
+                              </div>
+                            </div>
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Assignment Type</label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">assignment</span>
+                                <input name="assignmentType" value={data.assignmentType} onChange={handleChange} placeholder="e.g. Term Project" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Assignment Type</label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">assignment</span>
-                            <input name="assignmentType" value={data.assignmentType} onChange={handleChange} placeholder="e.g. Term Project" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
-                          </div>
-                        </div>
-                      </div>
                         </div>
                       )}
                     </div>
@@ -540,25 +540,25 @@ export default function CoverGenerator() {
                       </button>
                       {expandedSections.design && (
                         <div className="px-4 pb-4 space-y-4 border-t border-outline-variant/20 bg-slate-50/30 pt-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Course Code <span className="text-red-500">*</span></label>
-                          <div className="relative">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">tag</span>
-                            <input name="courseCode" value={data.courseCode} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-bold font-mono focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.courseCode ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
-                          </div>
-                          {errors.courseCode && <p className="text-xs text-red-500 ml-1">{errors.courseCode}</p>}
-                        </div>
-                        <div className="space-y-2 relative group">
-                          <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Theme Color</label>
-                          <div className="relative flex items-center gap-3">
-                            <input name="themeColor" value={data.themeColor} onChange={handleChange} className="w-16 h-12 bg-white border border-outline-variant/30 rounded-lg cursor-pointer focus:ring-4 focus:ring-primary/10 outline-none" type="color" />
-                            <div className="flex-1">
-                              <input type="text" value={data.themeColor} onChange={(e) => setData(prev => ({ ...prev, themeColor: e.target.value }))} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 px-3 text-on-surface text-sm font-mono focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" placeholder="#3525cd" />
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Course Code <span className="text-red-500">*</span></label>
+                              <div className="relative">
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">tag</span>
+                                <input name="courseCode" value={data.courseCode} onChange={handleChange} className={`w-full bg-white border rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-bold font-mono focus:ring-4 focus:ring-primary/10 transition-all outline-none ${errors.courseCode ? 'border-red-400 focus:border-red-500' : 'border-outline-variant/30 focus:border-primary'}`} type="text" />
+                              </div>
+                              {errors.courseCode && <p className="text-xs text-red-500 ml-1">{errors.courseCode}</p>}
+                            </div>
+                            <div className="space-y-2 relative group">
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">Theme Color</label>
+                              <div className="relative flex items-center gap-3">
+                                <input name="themeColor" value={data.themeColor} onChange={handleChange} className="w-16 h-12 bg-white border border-outline-variant/30 rounded-lg cursor-pointer focus:ring-4 focus:ring-primary/10 outline-none" type="color" />
+                                <div className="flex-1">
+                                  <input type="text" value={data.themeColor} onChange={(e) => setData(prev => ({ ...prev, themeColor: e.target.value }))} className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 px-3 text-on-surface text-sm font-mono focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" placeholder="#3525cd" />
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
                         </div>
                       )}
                     </div>
