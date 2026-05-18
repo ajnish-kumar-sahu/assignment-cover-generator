@@ -391,10 +391,10 @@ export default function CoverGenerator() {
                           <h4 className="font-headline text-sm text-indigo-900 mb-2">Institutional Identity</h4>
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2 relative group">
-                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1">University <span className="text-red-500">*</span></label>
+                              <label className="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant ml-1 block">University <span className="text-red-500">*</span></label>
                               <div className="relative">
-                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg">account_balance</span>
-                                <input name="universityName" value={data.universityName || ''} onChange={handleChange} placeholder="e.g. Oxford University" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none" type="text" />
+                                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-lg duration-200">account_balance</span>
+                                <input name="universityName" value={data.universityName || ''} onChange={handleChange} placeholder="e.g. Oxford University" className="w-full bg-white border border-outline-variant/30 rounded-lg py-3 pr-4 pl-12 text-on-surface text-sm font-medium hover:border-outline-variant/50 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-200 outline-none" type="text" />
                               </div>
                             </div>
                             <div className="space-y-2 relative group">

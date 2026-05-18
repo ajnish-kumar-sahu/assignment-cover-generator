@@ -96,20 +96,20 @@ export default function Landing() {
             <div className="flex items-center gap-12">
               <Logo />
               <div className="hidden md:flex items-center gap-8 bg-surface-container-low/50 backdrop-blur-md px-6 py-2 rounded-full border border-outline-variant/20 shadow-inner">
-                <Link className="text-slate-600 hover:text-primary text-xs font-bold uppercase tracking-widest transition-colors duration-300" to="/research">Research</Link>
-                <Link className="text-slate-600 hover:text-primary text-xs font-bold uppercase tracking-widest transition-colors duration-300" to="/archive">Archive</Link>
-                <Link className="text-slate-600 hover:text-primary text-xs font-bold uppercase tracking-widest transition-colors duration-300" to="/curations">Curations</Link>
-                <Link className="text-slate-600 hover:text-primary text-xs font-bold uppercase tracking-widest transition-colors duration-300" to="/library">Library</Link>
+                <Link className="text-slate-600 hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:rounded-lg px-2 py-1 text-xs font-bold uppercase tracking-widest transition-colors duration-200" to="/research">Research</Link>
+                <Link className="text-slate-600 hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:rounded-lg px-2 py-1 text-xs font-bold uppercase tracking-widest transition-colors duration-200" to="/archive">Archive</Link>
+                <Link className="text-slate-600 hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:rounded-lg px-2 py-1 text-xs font-bold uppercase tracking-widest transition-colors duration-200" to="/curations">Curations</Link>
+                <Link className="text-slate-600 hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:rounded-lg px-2 py-1 text-xs font-bold uppercase tracking-widest transition-colors duration-200" to="/library">Library</Link>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Link to="/login" className="text-slate-600 font-medium px-4 py-2 hover:bg-slate-100/50 transition-colors rounded-xl text-sm hidden sm:block">Login</Link>
-              <Link to="/signup" className="bg-primary text-white px-5 py-2 rounded-full font-bold text-xs tracking-widest uppercase shadow-md hover:bg-primary/90 transition-all hover:scale-95 hidden sm:block">Sign Up</Link>
+              <Link to="/login" className="text-slate-600 font-medium px-4 py-2 hover:bg-slate-100/50 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 transition-all duration-200 rounded-xl text-sm hidden sm:block">Login</Link>
+              <Link to="/signup" className="bg-primary text-white px-5 py-2 rounded-full font-bold text-xs tracking-widest uppercase shadow-md hover:bg-primary/90 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-primary/30 focus:ring-offset-2 transition-all duration-200 active:scale-95 hidden sm:block">Sign Up</Link>
               <div className="w-[1px] h-6 bg-slate-200 mx-2 hidden sm:block"></div>
-              <Link to="/notifications" className="w-10 h-10 flex items-center justify-center text-slate-600 hover:text-primary hover:bg-primary/10 rounded-full transition-all">
+              <Link to="/notifications" className="w-10 h-10 flex items-center justify-center text-slate-600 hover:text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 rounded-full transition-all duration-200">
                 <span className="material-symbols-outlined text-[20px]">notifications</span>
               </Link>
-              <Link to="/settings" className="w-10 h-10 flex items-center justify-center text-slate-600 hover:text-primary hover:bg-primary/10 rounded-full transition-all">
+              <Link to="/settings" className="w-10 h-10 flex items-center justify-center text-slate-600 hover:text-primary hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 rounded-full transition-all duration-200">
                 <span className="material-symbols-outlined text-[20px]">settings</span>
               </Link>
               <Link to="/profile" className="ml-2 w-10 h-10 rounded-full overflow-hidden ring-2 ring-primary/20 hover:ring-primary transition-all shadow-md group">
@@ -150,13 +150,13 @@ export default function Landing() {
                 </p>
                 
                 <div className="flex flex-wrap items-center gap-6">
-                  <Link to="/signup" className="group relative px-8 py-5 bg-indigo-950 text-white rounded-2xl font-bold tracking-widest text-xs uppercase overflow-hidden shadow-2xl shadow-indigo-900/30 hover:shadow-indigo-900/50 hover:-translate-y-1 transition-all duration-300">
+                  <Link to="/signup" className="group relative px-8 py-5 bg-indigo-950 text-white rounded-2xl font-bold tracking-widest text-xs uppercase overflow-hidden shadow-2xl shadow-indigo-900/30 hover:shadow-indigo-900/50 hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-indigo-900/30 focus:ring-offset-2 active:scale-95 transition-all duration-300">
                     <span className="relative z-10 flex items-center gap-3">
-                      Launch Suite <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                      Launch Suite <span className="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform duration-200">arrow_forward</span>
                     </span>
                     <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary-container opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </Link>
-                  <Link to="/curations" className="px-8 py-5 text-indigo-950 rounded-2xl font-bold tracking-widest text-xs uppercase hover:bg-indigo-900/5 transition-colors border border-transparent hover:border-indigo-900/10">
+                  <Link to="/curations" className="px-8 py-5 text-indigo-950 rounded-2xl font-bold tracking-widest text-xs uppercase hover:bg-indigo-900/5 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-900/30 focus:ring-offset-2 active:scale-95 transition-all duration-200 border border-transparent hover:border-indigo-900/10">
                     Explore Curations
                   </Link>
                 </div>
