@@ -69,7 +69,10 @@ export default function Templates() {
   };
 
   return (
-    <DocLayout title="Document Templates">
+    <DocLayout 
+      title="Document Templates"
+      breadcrumbs={[{ label: 'Workspace', href: '/cover-generator', icon: 'edit' }, { label: 'Templates' }]}
+    >
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

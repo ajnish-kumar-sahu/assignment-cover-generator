@@ -23,7 +23,10 @@ export default function Profile() {
   };
 
   return (
-    <DocLayout title="Scholar Profile">
+    <DocLayout 
+      title="Scholar Profile"
+      breadcrumbs={[{ label: 'Account', icon: 'account_circle' }, { label: 'Profile' }]}
+    >
       <div className="flex flex-col lg:flex-row gap-16 items-start mt-12 bg-white/40 p-12 rounded-[3rem] border border-outline-variant/20 shadow-[0_8px_32px_rgba(0,0,0,0.04)] backdrop-blur-3xl relative overflow-hidden group">
         
         {/* Decorative Background Element */}

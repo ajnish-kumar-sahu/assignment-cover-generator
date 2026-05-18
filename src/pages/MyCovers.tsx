@@ -22,7 +22,10 @@ export default function MyCovers() {
   };
 
   return (
-    <DocLayout title="My Covers">
+    <DocLayout 
+      title="My Covers"
+      breadcrumbs={[{ label: 'Workspace', href: '/cover-generator', icon: 'edit' }, { label: 'My Covers' }]}
+    >
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -44,7 +47,7 @@ export default function MyCovers() {
         </div>
         <Link
           to="/cover-generator"
-          className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-600/20"
+          className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-xl focus:ring-4 focus:ring-indigo-300 focus:ring-offset-2 transition-all duration-200 shadow-lg shadow-indigo-600/20 active:scale-95"
         >
           <span className="material-symbols-outlined text-sm">add</span> New Cover
         </Link>
@@ -64,8 +67,8 @@ export default function MyCovers() {
                 layout
                 variants={itemVariants}
                 exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-                whileHover={{ y: -6 }}
-                className="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-indigo-900/8 transition-all overflow-hidden"
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                className="group bg-white rounded-3xl border border-slate-200 shadow-md hover:shadow-2xl hover:shadow-indigo-900/12 transition-all duration-300 overflow-hidden"
               >
                 {/* Thumbnail */}
                 <div className="aspect-[3/4] relative overflow-hidden">
@@ -88,16 +91,16 @@ export default function MyCovers() {
                   <div className="flex gap-2">
                     <Link
                       to="/cover-generator"
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-indigo-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-indigo-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-700 hover:-translate-y-0.5 focus:ring-4 focus:ring-indigo-300 focus:ring-offset-2 transition-all duration-200 active:scale-95"
                     >
                       <span className="material-symbols-outlined text-sm">edit</span> Re-edit
                     </Link>
-                    <button className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-slate-50 text-slate-600 border border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-100 transition-colors">
+                    <button className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-slate-100 hover:-translate-y-0.5 focus:ring-4 focus:ring-slate-300 focus:ring-offset-2 transition-all duration-200 active:scale-95">
                       <span className="material-symbols-outlined text-sm">download</span> PDF
                     </button>
                     <button
                       onClick={() => deleteById(cover.id)}
-                      className="w-10 flex items-center justify-center py-2.5 bg-red-50 text-red-400 border border-red-100 rounded-xl hover:bg-red-100 transition-colors"
+                      className="w-10 flex items-center justify-center py-2.5 bg-red-50 text-red-500 border border-red-200 rounded-xl hover:bg-red-100 hover:-translate-y-0.5 focus:ring-4 focus:ring-red-300 focus:ring-offset-2 transition-all duration-200 active:scale-95"
                       title="Delete"
                     >
                       <span className="material-symbols-outlined text-sm">delete</span>
@@ -111,8 +114,8 @@ export default function MyCovers() {
             <motion.div
               layout
               variants={itemVariants}
-              whileHover={{ y: -4 }}
-              className="rounded-3xl border-2 border-dashed border-indigo-200/60 flex flex-col items-center justify-center text-center p-10 hover:border-indigo-400/60 hover:bg-indigo-50/30 transition-all cursor-pointer group min-h-[280px]"
+              whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              className="rounded-3xl border-2 border-dashed border-indigo-300 flex flex-col items-center justify-center text-center p-10 hover:border-indigo-500 hover:bg-indigo-50/50 focus-within:ring-4 focus-within:ring-indigo-300 focus-within:ring-offset-2 transition-all duration-300 cursor-pointer group min-h-[280px] bg-white"
             >
               <span className="material-symbols-outlined text-5xl text-indigo-200 mb-4 group-hover:text-indigo-400 transition-colors">add_circle</span>
               <p className="font-semibold text-slate-600 text-sm mb-1">Generate New</p>
@@ -137,7 +140,7 @@ export default function MyCovers() {
             <p className="text-sm text-slate-500 mt-2 max-w-sm relative z-10 mb-8">
               Start by generating your first cover page in the Editor Workspace.
             </p>
-            <Link to="/cover-generator" className="relative z-10 px-8 py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-lg">
+            <Link to="/cover-generator" className="relative z-10 px-8 py-3 bg-indigo-600 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-700 hover:-translate-y-0.5 hover:shadow-xl focus:ring-4 focus:ring-indigo-300 focus:ring-offset-2 transition-all duration-200 shadow-lg active:scale-95">
               Launch Generator
             </Link>
           </motion.div>
