@@ -1,0 +1,22 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "vite",
+  "installCommand": "npm install",
+  "framework": "vite",
+  "outputDirectory": "dist",
+  "env": {
+    "VITE_API_URL": {
+      "description": "API endpoint for the application"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

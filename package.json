@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build:prod": "NODE_ENV=production npm run build",
+    "preview": "vite preview --port 3000",
+    "start": "vite preview --port ${PORT:-3000}",
+    "lint": "eslint ."
   },
   "dependencies": {
     "framer-motion": "^12.38.0",
@@ -27,6 +29,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "esbuild": "^0.27.7",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
